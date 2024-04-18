@@ -60,7 +60,7 @@
 
                                                     {{--Delete--}}
                                                     <a id="{{ $c->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
-                                                    <form method="POST" id="item-delete-{{ $c->id }}" action="{{ url('classroom.destroy', $c->id) }}" class="hidden">@csrf @method('delete')</form>
+                                                    <form method="POST" id="item-delete-{{ $c->id }}" action="{{ route('classroom.destroy', $c->id) }}" class="hidden">@csrf @method('delete')</form>
 
                                                 </div>
                                             </div>

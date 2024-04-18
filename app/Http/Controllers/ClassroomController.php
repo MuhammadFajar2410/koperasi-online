@@ -7,6 +7,7 @@ use App\Models\StudentAssessment;
 use App\Models\StudentClassroom;
 use App\Models\Teacher;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -156,8 +157,20 @@ class ClassroomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Classroom $classroom)
+    public function destroy($id)
     {
-        //
+        try {
+            $classroom = Classroom::findOrFail($id);
+            $classroom->delete();
+            Session::flash('success', 'Kelas berhasil dihapus');
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] == 1451) {
+                Session::flash('error', 'Tolong pastikan semua siswa dalam kelas sudah kosong, baru dapat menghapus kelas');
+            } else {
+                Session::flash('error', 'Terjadi error ketika melakukan delete');
+            }
+        }
+
+        return back();
     }
 }

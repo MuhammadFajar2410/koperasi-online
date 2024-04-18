@@ -84,7 +84,8 @@
                                             <th>Nama Siswa</th>
                                             <th>Jenis Kelamin</th>
                                             <th>Status</th>
-                                            <th><input type="checkbox" class="form-check-input" id="selectAllCheckbox"><span>All</span></th>
+                                            <th style="text-align: center">Aksi</th>
+                                            <th><input type="checkbox" class="form-check-input" id="selectAllCheckbox"><span></span></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -96,7 +97,27 @@
                                                 <td>{{ $s->student_profile->name }}</td>
                                                 <td>{{ $s->student_profile->gender }}</td>
                                                 <td>{{ $s->student_profile->status }}</td>
-                                                <td><input type="checkbox" class="form-check-input studentCheckbox" name="selected_students[]" value="{{ $s->student_profile->id }}">
+                                                <td class="text-center">
+                                                    <div class="list-icons">
+                                                        <div class="dropdown">
+                                                            <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                                                <i class="icon-menu9"></i>
+                                                            </a>
+
+                                                            <div class="dropdown-menu dropdown-menu-left">
+
+
+                                                                <a class="dropdown-item" href="{{ route('students.profile', $s->student_profile->id) }}" target="_blank"><i class="icon-eye"></i> Profile</a>
+                                                                <a class="dropdown-item" href="{{ route('student.assessment.view',  $classroom->id) }}"><i class="icon-eye"></i> Penilaian</a>
+
+                                                                {{-- <a id="{{ $u->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
+                                                                <form method="POST" id="item-delete-{{ $u->id }}" action="{{ route('users.destroy', $u->id) }}" class="hidden">@csrf @method('delete')</form> --}}
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td ><input type="checkbox" class="form-check-input studentCheckbox" name="selected_students[]" value="{{ $s->student_profile->id }}">
                                                 </td>
                                             </tr>
                                             @endforeach

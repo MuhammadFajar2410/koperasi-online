@@ -53,6 +53,8 @@
 
                                                             <a href="{{ route('assessment.edit', $ass->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
 
+                                                            <a id="{{ $ass->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
+                                                            <form method="POST" id="item-delete-{{ $ass->id }}" action="{{ route('assessment.destroy', $ass->id) }}" class="hidden">@csrf @method('delete')</form>
                                                         </div>
                                                     </div>
                                                 </div>

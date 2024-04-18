@@ -60,30 +60,68 @@ class ScoreController extends Controller
      */
     public function show(Score $score)
     {
-        //
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Score $score)
+    public function edit($id)
     {
-        //
+        $score = Score::where('id', $id)->first();
+        // dd($score);
+        return view('pages.assessment.score.edit', compact('score'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Score $score)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'number' => 'required|numeric|between:0,100',
+            'max' => 'required|numeric|between:1,100',
+            'letter' => 'required|max:3'
+        ]);
+
+        $score = Score::where('id', $id)->first();
+
+        if(!$score){
+            abort(404);
+        }
+
+
+        try {
+            $input = $request->all();
+
+            $score->update($input);
+            Session::flash('success', 'Berhasil update');
+
+            return redirect()->route('score.index');
+
+        } catch (\Exception $e) {
+            // Session::flash('error', $e->getMessage());
+            Session::flash('error', 'Terjadi kesalahan ketika menyimpan');
+            return back();
+        }
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Score $score)
+    public function destroy($id)
     {
+        $score = Score::where('id', $id)->first();
+        $status = $score->delete();
+
+        if ($status) {
+            Session::flash('success', 'Berhasil dihapus');
+        } else {
+            Session::flash('error', 'Terjadi error ketika melakukan delete');
+        }
+
+        return back();
 
     }
 }

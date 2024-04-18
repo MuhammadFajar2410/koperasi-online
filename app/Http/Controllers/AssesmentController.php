@@ -113,8 +113,17 @@ class AssesmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Assessment $assesment)
+    public function destroy($id)
     {
-        //
+        $assessment = Assessment::where('id', $id)->first();
+        $status = $assessment->delete();
+
+        if ($status) {
+            Session::flash('success', 'Berhasil dihapus');
+        } else {
+            Session::flash('error', 'Terjadi error ketika melakukan delete');
+        }
+
+        return back();
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Classroom;
 use App\Models\StudentClassroom;
 use App\Models\StudentProfile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class StudentClassroomController extends Controller
 {
@@ -73,8 +74,18 @@ class StudentClassroomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(StudentClassroom $studentClassroom)
+    public function destroy($id)
     {
-        //
+        $student = StudentClassroom::where('id', $id)->first();
+        $status = $student->delete();
+
+        if ($status) {
+            Session::flash('success', 'Berhasil dihapus');
+        } else {
+            Session::flash('error', 'Terjadi error ketika melakukan delete');
+        }
+
+        return back();
+
     }
 }

@@ -49,7 +49,10 @@
 
                                                         <div class="dropdown-menu dropdown-menu-left">
 
-                                                            <a href="{{ route('assessment.edit', $score->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
+                                                            <a href="{{ route('score.edit', $score->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
+
+                                                            <a id="{{ $score->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
+                                                            <form method="POST" id="item-delete-{{ $score->id }}" action="{{ route('score.destroy', $score->id) }}" class="hidden">@csrf @method('delete')</form>
 
                                                         </div>
                                                     </div>

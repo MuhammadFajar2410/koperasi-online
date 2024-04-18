@@ -10,6 +10,7 @@ use App\Http\Controllers\StudentClassroomController;
 use App\Http\Controllers\StudentProfileController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
+use App\Models\StudentClassroom;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,19 +54,23 @@ Route::middleware(['auth', 'multirole:admin,kepala_sekolah'])->group(function ()
 
     Route::get('mapel', [AssesmentController::class, 'index'])->name('assessment.index');
     Route::post('mapel', [AssesmentController::class, 'store'])->name('assessment.add');
+    Route::delete('mapel/{id}', [AssesmentController::class, 'destroy'])->name('assessment.destroy');
     Route::get('mapel/{id}/edit', [AssesmentController::class, 'edit'])->name('assessment.edit');
     Route::patch('mapel/{id}/edit', [AssesmentController::class, 'update'])->name('assessment.update');
 
     Route::get('nilai', [ScoreController::class, 'index'])->name('score.index');
     Route::post('nilai', [ScoreController::class, 'store'])->name('score.add');
-    // Route::get('nilai/{id}/edit', [ScoreController::class, 'edit'])->name('score.edit');
-    // Route::patch('nilai/{id}/edit', [ScoreController::class, 'update'])->name('score.update');
+    Route::delete('nilai/{id}',[ScoreController::class,'destroy'])->name('score.destroy');
+    Route::get('nilai/{id}/edit', [ScoreController::class, 'edit'])->name('score.edit');
+    Route::patch('nilai/{id}/edit', [ScoreController::class, 'update'])->name('score.update');
 });
 
 Route::middleware(['auth', 'multirole:admin,guru,kepala_sekolah'])->group(function () {
     Route::get('kelas', [ClassroomController::class, 'index'])->name('classroom.index');
     Route::post('kelas', [ClassroomController::class, 'store'])->name('classroom.add');
     Route::get('kelas/{id}', [StudentClassroomController::class,'show'])->name('classroom.view');
+    Route::delete('kelas/{id}', [ClassroomController::class, 'destroy'])->name('classroom.destroy');
+    Route::delete('kelas/{classroom}/{id}', [StudentClassroomController::class, 'destroy'])->name('classroom.student.destroy');
     Route::get('kelas/{id}/edit', [ClassroomController::class, 'edit'])->name('classroom.edit');
     Route::patch('kelas/{id}/edit', [ClassroomController::class, 'update'])->name('classroom.update');
     Route::patch('kelas/pindah-kelas', [ClassroomController::class, 'classChange'])->name('classroom.pindah');

@@ -229,7 +229,7 @@
                             <p class="sp-3">NIP : {{ $student->classroom->teacher->nip }}</p>
                             Kepala Sekolah
                             <span class="sp-3">{{ $ks->profile->name ??  '..........................' }}</span>
-                            <p class="sp-3">NIP : {{ $ks->teacher->nip }}</p>
+                            <p class="sp-3">NIP : {{ $ks->teacher->nip ?? '' }}</p>
                         </td>
                         <td colspan="3" class="text-left">
                             Guru / Wali Kelas
@@ -237,7 +237,7 @@
                             <p class="sp-3">NIP : {{ $student->classroom->teacher->nip }}</p>
                             Kepala Sekolah
                             <span class="sp-3">{{ $ks->profile->name ??  '..........................' }}</span>
-                            <p class="sp-3">NIP : {{ $ks->teacher->nip }}</p>
+                            <p class="sp-3">NIP : {{ $ks->teacher->nip ?? '' }}</p>
                         </td>
                     </tr>
             </tbody>

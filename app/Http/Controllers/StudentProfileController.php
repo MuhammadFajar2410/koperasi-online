@@ -142,7 +142,7 @@ class StudentProfileController extends Controller
             abort(404);
         }
 
-        dd($student);
+        // dd($student);
 
         $assessments = StudentAssessment::SingleStudentAssessment($classroom, $id);
 
@@ -156,6 +156,11 @@ class StudentProfileController extends Controller
     public function show($id)
     {
         $student = StudentProfile::getSingleStudent($id);
+
+        if(!$student){
+            abort(404);
+        }
+
         return view('pages.students.student_details.detail', compact('student'));
     }
 
