@@ -73,7 +73,7 @@
                             </div>
                             <button class="btn btn-primary col-1">Save</button>
                         </div>
-                    </form>
+
 
                     <table class="table datatable-button-html5-columns">
                         <thead>
@@ -116,6 +116,7 @@
                             @endif
                         </tbody>
                     </table>
+                </form>
 
                     @if ($students)
                         @foreach ($students as $s)
