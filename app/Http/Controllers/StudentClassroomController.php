@@ -74,9 +74,10 @@ class StudentClassroomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($classroom,$id)
     {
-        $student = StudentClassroom::where('id', $id)->first();
+        $student = StudentClassroom::where('student_id', $id)->where('class_id', $classroom)->first();
+        // dd($student);
         $status = $student->delete();
 
         if ($status) {

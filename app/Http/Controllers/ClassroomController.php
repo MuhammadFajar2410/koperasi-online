@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Classroom;
 use App\Models\StudentAssessment;
 use App\Models\StudentClassroom;
+use App\Models\StudentProfile;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Database\QueryException;
@@ -23,7 +24,27 @@ class ClassroomController extends Controller
         $homeroom = Teacher::homeroom();
 
         $grades = ['1', '2', '3', '4', '5', '6'];
-        return view('pages.class.index', compact('classlist', 'homeroom', 'grades'));
+
+        //add siswa naik kelas
+        $classroom = Classroom::classList();
+        $student = StudentProfile::getAllActiveStudent();
+        return view('pages.class.index', compact('classlist', 'homeroom', 'grades', 'classroom', 'student'));
+    }
+
+    public function addNew(Request $request)
+    {
+        try {
+            $input = $request->all();
+
+            StudentClassroom::create($input);
+
+            Session::flash('success', 'Berhasil Menambah Siswa');
+            return back();
+
+        } catch (\Exception $e){
+            Session::flash('error', $e->getMessage());
+            return back();
+        }
     }
 
     /**

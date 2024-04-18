@@ -36,6 +36,7 @@
                             </thead>
                             <tbody>
                         @if ($users)
+
                             @foreach($users as $u)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
@@ -56,8 +57,8 @@
                                                     <a href="{{ route('users.edit', $u->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
 
 
-                                                    <a id="{{ $u->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
-                                                    <form method="POST" id="item-delete-{{ $u->id }}" action="{{ route('users.destroy', $u->id) }}" class="hidden">@csrf @method('delete')</form>
+                                                    {{-- <a id="{{ $u->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
+                                                    <form method="POST" id="item-delete-{{ $u->id }}" action="{{ route('users.destroy', $u->id) }}" class="hidden">@csrf @method('delete')</form> --}}
 
                                                 </div>
                                             </div>

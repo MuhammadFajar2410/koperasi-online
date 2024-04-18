@@ -18,6 +18,7 @@
             <ul class="nav nav-tabs nav-tabs-highlight">
                 <li class="nav-item"><a href="#all-classes" class="nav-link active" data-toggle="tab">Kelas</a></li>
                 <li class="nav-item"><a href="#new-class" class="nav-link" data-toggle="tab"><i class="icon-plus2"></i> Tambah Kelas Baru</a></li>
+                <li class="nav-item"><a href="#add-new-class" class="nav-link" data-toggle="tab"><i class="icon-plus2"></i> Tambah Siswa</a></li>
             </ul>
 
             <div class="tab-content">
@@ -60,7 +61,7 @@
 
                                                     {{--Delete--}}
                                                     <a id="{{ $c->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
-                                                    <form method="POST" id="item-delete-{{ $c->id }}" action="{{ route('classroom.destroy', $c->id) }}" class="hidden">@csrf @method('delete')</form>
+                                                    <form method="POST" id="item-delete-{{ $c->id }}" action="{{ url('classroom.destroy', $c->id) }}" class="hidden">@csrf @method('delete')</form>
 
                                                 </div>
                                             </div>
@@ -117,6 +118,48 @@
                                     <label class="col-lg-3 col-form-label font-weight-semibold">Tahun Ajaran <span class="text-danger">*</span></label>
                                     <div class="col-lg-9">
                                         <input name="period" value="{{ old('period') }}" type="text" class="form-control" placeholder="Tahun Ajaran" required >
+                                    </div>
+                                </div>
+
+                                <div class="text-right">
+                                    <button id="ajax-btn" type="submit" class="btn btn-primary">Submit form <i class="icon-paperplane ml-2"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="add-new-class">
+                    <div class="row">
+                        <div class="col-md-12">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form method="POST" action="{{ route('classroom.new') }}">
+                                @csrf
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label font-weight-semibold" for="class_id">Kelas <span class="text-danger">*</span></label>
+                                    <div class="col-lg-9">
+                                        <select class="select-search form-control" id="class_id" name="class_id" data-fouc data-placeholder="Choose.." required>
+                                            <option value=""></option>
+                                            @foreach ($classroom as $c )
+                                                <option value="{{ $c->id }}">{{ $c->class_name . ' - ' . $c->period }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label font-weight-semibold" for="student_id">Siswa <span class="text-danger">*</span></label>
+                                    <div class="col-lg-9">
+                                        <select class="select-search form-control" id="student_id" name="student_id" data-fouc data-placeholder="Choose.." required>
+                                            <option value=""></option>
+                                            @foreach ($student as $s )
+                                                <option value="{{ $s->id }}">{{ $s->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
 

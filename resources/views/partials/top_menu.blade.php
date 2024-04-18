@@ -4,11 +4,11 @@
         <h4 class="text-bold text-white">{{ config('app.name') }}</h4>
         </a>
     </div>
-  {{--  <div class="navbar-brand">
+   {{-- <div class="navbar-brand">
         <a href="index.html" class="d-inline-block">
             <img src="{{ asset('global_assets/images/logo_light.png') }}" alt="">
         </a>
-    </div>--}}
+    </div> --}}
 
     <div class="d-md-none">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">

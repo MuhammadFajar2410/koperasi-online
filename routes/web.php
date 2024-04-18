@@ -45,7 +45,7 @@ Route::middleware(['auth', 'multirole:admin,kepala_sekolah'])->group(function ()
     Route::post('users', [UserController::class, 'adminAddUser'])->name('users.add');
     Route::get('users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::patch('users/{id}/edit', [UserController::class, 'update'])->name('users.update');
-    Route::delete('users/{id}/delete', [UserController::class, 'destroy'])->name('users.destroy');
+    // Route::delete('users/{id}/delete', [UserController::class, 'destroy'])->name('users.destroy');
 
     Route::get('guru', [TeacherController::class, 'index'])->name('teacher.index');
     Route::post('guru', [TeacherController::class, 'store'])->name('teacher.add');
@@ -68,6 +68,7 @@ Route::middleware(['auth', 'multirole:admin,kepala_sekolah'])->group(function ()
 Route::middleware(['auth', 'multirole:admin,guru,kepala_sekolah'])->group(function () {
     Route::get('kelas', [ClassroomController::class, 'index'])->name('classroom.index');
     Route::post('kelas', [ClassroomController::class, 'store'])->name('classroom.add');
+    Route::post('kelas/baru',[ClassroomController::class,'addNew'])->name('classroom.new');
     Route::get('kelas/{id}', [StudentClassroomController::class,'show'])->name('classroom.view');
     Route::delete('kelas/{id}', [ClassroomController::class, 'destroy'])->name('classroom.destroy');
     Route::delete('kelas/{classroom}/{id}', [StudentClassroomController::class, 'destroy'])->name('classroom.student.destroy');
