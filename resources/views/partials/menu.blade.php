@@ -27,7 +27,7 @@
                     <div class="media-body">
                         <div class="media-title font-weight-semibold">{{ Auth::user()->profile->name }}</div>
                         <div class="font-size-xs opacity-50">
-                            <i class="icon-user font-size-sm"></i> &nbsp;{{ ucwords(str_replace('_', ' ', Auth::user()->role)) }}
+                            <i class="icon-user font-size-sm"></i> &nbsp;{{ ucwords(str_replace('_', ' ', Auth::user()->role->name)) }}
                         </div>
                     </div>
 
@@ -52,30 +52,22 @@
                 </li>
                 {{-- Class --}}
 
-                <!--Teachers-->
 
-                @if(Auth::user() && (Auth::user()->role == 'admin' || Auth::user()->role == 'kepala_sekolah'))
-                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['teacher.index']) ? 'nav-item-expanded nav-item-open' : '' }} ">
-                        <a href="{{ route('teacher.index') }}" class="nav-link"><i class="icon-users2"></i> <span>Guru</span></a>
-                    </li>
-
-                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['users.index']) ? 'nav-item-expanded nav-item-open' : '' }} ">
-                        <a href="{{ route('users.index') }}" class="nav-link"><i class="icon-users4"></i> <span>Users</span></a>
-                    </li>
-
-                @endif
 
                 <!--Academics-->
-                @if(Auth::user() && (Auth::user()->role == 'admin' || Auth::user()->role == 'guru' || Auth::user()->role == 'kepala_sekolah'))
+                {{-- @php
+                    $user_role = User::with('roles')
+                @endphp --}}
+                @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua'))
                     {{-- <li class="nav-item {{ in_array(Route::currentRouteName(), ['classroom.index']) ? 'nav-item-expanded nav-item-open' : '' }} ">
                         <a href="{{ route('classroom.index') }}" class="nav-link"><i class="icon-windows2"></i> <span>Kelas</span></a>
                     </li> --}}
-                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['classroom.index', 'student.classroom.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
-                        <a href="#" class="nav-link"><i class="icon-windows2"></i><span>Kelas</span></a>
+                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), []) ? 'nav-item-expanded nav-item-open' : '' }}">
+                        <a href="#" class="nav-link"><i class="icon-windows2"></i><span>User Manajemen</span></a>
                         <ul class="nav nav-group-sub">
                             <li class="nav-item">
-                                <a href="{{ route('classroom.index') }}" class="nav-link
-                                {{ (Route::is('classroom.index')) ? 'active' : ''}}">Daftar Kelas</a>
+                                <a href="{{ route('role.index') }}" class="nav-link
+                                {{ (Route::is('role.index')) ? 'active' : ''}}">Jabatan</a>
                             </li>
                         </ul>
                     </li>
@@ -85,17 +77,17 @@
                             @if(Auth::user() && (Auth::user()->role == 'admin' || Auth::user()->role == 'kepala_sekolah'))
                                 {{-- Standar dari Nilai  --}}
                                 <li class="nav-item">
-                                    <a href="{{ route('score.index') }}"
+                                    <a href="{{ url('score.index') }}"
                                     class="nav-link {{ (Route::is('score.index')) ? 'active' : '' }}">Standar Penilaian</a>
                                 </li>
                                     {{-- Penilaian dan Mata Pelajaran --}}
                                 <li class="nav-item">
-                                    <a href="{{ route('assessment.index') }}"
+                                    <a href="{{ url('assessment.index') }}"
                                     class="nav-link {{ (Route::is('assessment.index')) ? 'active' : '' }}">Penilaian</a>
                                 </li>
                             @endif
                             <li class="nav-item">
-                                <a href="{{ route('student.assessment.index') }}"
+                                <a href="{{ url('student.assessment.index') }}"
                                 class="nav-link {{ (Route::is('student.assessment.index')) ? 'active' : '' }}">Penilaian Siswa</a>
                             </li>
                         </ul>
@@ -108,11 +100,11 @@
                             {{--Admit Student--}}
                             @if(Auth::user() && (Auth::user()->role == 'admin' || Auth::user()->role == 'guru' || Auth::user()->role == 'kepala_sekolah'))
                                 <li class="nav-item">
-                                    <a href="{{ route('students.add.index') }}"
+                                    <a href="{{ url('students.add.index') }}"
                                        class="nav-link {{ (Route::is('students.add.index')) ? 'active' : '' }}">Tambah Siswa Baru</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('students.index') }}"
+                                    <a href="{{ url('students.index') }}"
                                        class="nav-link {{ (Route::is('students.index')) ? 'active' : '' }}">Data Siswa</a>
                                 </li>
                             @endif

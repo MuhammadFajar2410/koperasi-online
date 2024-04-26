@@ -20,7 +20,7 @@ class MultiroleMiddleware
             abort(403, 'Unauthorized action.');
         }
         foreach ($roles as $role) {
-            if (auth()->user()->role === $role) {
+            if (auth()->user()->role->name === $role) {
                 return $next($request);
             }
         }

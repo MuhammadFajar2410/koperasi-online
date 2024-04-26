@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Profile;
-use App\Models\Teacher;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +19,7 @@ class UserController extends Controller
     {
         $users = User::getUsers();
         // dd($users);
-        $roles = ['admin' => 'Admin', 'guru' => 'Guru', 'wali_murid' => 'Wali Murid', 'kepala_sekolah' => 'Kepala Sekolah'];
+        $roles = Role::getActiveRole();
         return view('pages.admin.users.index', compact('users', 'roles'));
     }
 

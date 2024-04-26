@@ -12,7 +12,6 @@ class HomeController extends Controller
     {
         $user = User::getUserLogin(Auth::id());
         $role = Auth::user()->role;
-        // dd($role);
         return view('pages.admin.dashboard', compact('user', 'role'));
     }
 }

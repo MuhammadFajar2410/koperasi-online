@@ -19,7 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'role',
+        'role_id',
         'status',
         'username',
         'email',
@@ -46,9 +46,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function teacher()
+    public function role()
     {
-        return $this->hasOne(Teacher::class, 'user_id');
+        return $this->belongsTo(Role::class,'role_id');
     }
 
     public function profile()
@@ -58,35 +58,13 @@ class User extends Authenticatable
 
     public static function getUserLogin($user_id)
     {
-        return User::with('profile:user_id,name')->where('id', $user_id)->first();
+        return User::with('profile:user_id,name')
+            ->where('id', $user_id)
+            ->first();
     }
 
     public static function getUsers()
     {
-        return User::with('profile:user_id,name')->select('id', 'username', 'role', 'status')->get();
-    }
-
-    public static function getSingleUser($id)
-    {
-        return User::where('id', $id)->first();
-    }
-
-    public static function roleTeacher()
-    {
-        return User::with('profile:user_id,name')
-            ->select('id', 'username', 'role', 'status')
-            ->where('role', 'guru')
-            ->orWhere('role', 'kepala_sekolah')
-            ->where('status', true)
-            ->get();
-    }
-
-    public static function getRoleKs()
-    {
-        return User::with(['profile:user_id,name','teacher:user_id,nip'])
-            ->select('id', 'username', 'role', 'status')
-            ->where('role', 'kepala_sekolah')
-            ->where('status', true)
-            ->first();
+        return User::get();
     }
 }

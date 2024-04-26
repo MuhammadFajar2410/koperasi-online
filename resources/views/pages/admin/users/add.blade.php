@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('page_title', 'Siswa Baru')
+@section('page_title', 'Anggota Baru')
 @section('content')
 
     <div class="card">
@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <form method="POST" enctype="multipart/form-data" class="wizard-form steps-validation" action="{{ route('students.add') }}" data-fouc>
+        <form method="POST" enctype="multipart/form-data" class="wizard-form steps-validation" action="{{ url('students.add') }}" data-fouc>
             @csrf
              <h6>Data diri</h6>
              <fieldset>
