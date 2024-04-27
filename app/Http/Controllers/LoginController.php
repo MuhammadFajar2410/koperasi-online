@@ -62,18 +62,24 @@ class LoginController extends Controller
         try {
 
             $data = $request->all();
+            $data['created_by'] = 'MJR';
+            $data['gender'] = 'l';
             // dd($data);
             DB::beginTransaction();
 
             $user = User::create([
                 'username' => $data['username'],
-                'password' => Hash::make($data['password'])
+                'password' => Hash::make($data['password']),
+                'created_by' => $data['created_by'],
+
             ]);
 
             if ($user) {
                 Profile::create([
                     'user_id' => $user->id,
-                    'name' => $data['name']
+                    'name' => $data['name'],
+                    'created_by' => $data['created_by'],
+                    'gender' => $data['gender']
                 ]);
             }
 
@@ -84,11 +90,32 @@ class LoginController extends Controller
         } catch (\Exception $e) {
 
             DB::rollback();
-            // Session::flash('error', $e->getMessage());
-            Session::flash('error', 'Terjadi kesalahan saat registrasi. Silakan coba lagi.');
+            Session::flash('error', $e->getMessage());
+            // Session::flash('error', 'Terjadi kesalahan saat registrasi. Silakan coba lagi.');
             return back();
         }
     }
+
+    // public function register(Request $request)
+    // {
+    //     $this->validate($request,[
+    //         'name' => 'string|required|min:3',
+    //         'username' => 'required|unique:users,username',
+    //         'password' => 'required|confirmed'
+    //     ]);
+
+    //     try{
+    //         $input = $request->all();
+
+    //         User::create($input);
+    //         Session::flash('success', 'Berhasil register silahkan login');
+
+    //         return redirect()->route('login-page');
+    //     } catch (\Exception $e){
+    //         Session::flash('error', $e->getMessage());
+    //         return back();
+    //     }
+    // }
 
     public function logout(Request $request)
     {

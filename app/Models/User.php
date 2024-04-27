@@ -23,7 +23,12 @@ class User extends Authenticatable
         'status',
         'username',
         'email',
+        'joinOn',
+        'exitOn',
+        'reason',
         'password',
+        'created_by',
+        'updated_by'
     ];
 
     /**

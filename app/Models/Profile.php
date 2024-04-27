@@ -11,10 +11,15 @@ class Profile extends Model
 
     protected $fillable = [
         'user_id',
+        'member_id',
         'name',
         'nik',
         'address',
-        'phone'
+        'gender',
+        'job',
+        'phone',
+        'created_by',
+        'updated_by'
     ];
 
     public function user()

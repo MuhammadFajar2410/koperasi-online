@@ -34,6 +34,9 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|min:3',
+            'address' => 'required',
+            'member_id' => 'numeric|min_digits:7|unique:profiles,member_id',
+            'amount' => 'numeric',
             'username' => 'required|unique:users,username',
             'password' => 'required|min:6|confirmed'
         ]);
@@ -43,11 +46,10 @@ class UserController extends Controller
         try {
             $data = $request->all();
 
-            // dd($data);
+            dd($data);
             $user = User::create([
                 'username' => $data['username'],
                 'password' => Hash::make($data['password']),
-                'role' => $data['role']
             ]);
 
             if ($user) {

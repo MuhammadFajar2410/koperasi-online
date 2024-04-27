@@ -49,4 +49,5 @@ Route::middleware(['auth', 'multirole:admin,ketua'])->group(function () {
     Route::delete('jabatan/{id}',[RoleController::class,'destroy'])->name('role.destroy');
 
     Route::get('user/add',[UserController::class,'addUser'])->name('add.user.view');
+    Route::post('user/add',[UserController::class,'adminAddUser'])->name('add.user');
 });
