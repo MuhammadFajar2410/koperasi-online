@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Profile;
 use App\Models\Role;
+use App\Models\Saving;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -45,30 +48,56 @@ class UserController extends Controller
 
         try {
             $data = $request->all();
+            $data['created_by'] = User::getUserLogin(Auth::id())->profile->name;
 
-            dd($data);
+            // dd($data);
             $user = User::create([
                 'username' => $data['username'],
                 'password' => Hash::make($data['password']),
+                'created_by' => $data['created_by'],
+                'role_id' => $data['role_id'],
+                'joinOn' => $data['joinOn']
             ]);
 
             if ($user) {
                 Profile::create([
                     'user_id' => $user->id,
+                    'member_id' =>$data['member_id'],
                     'name' => $data['name'],
+                    'address' => $data['address'],
+                    'gender' => $data['gender'],
+                    'job' => $data['job'],
+                    'created_by' => $data['created_by'],
+                ]);
+
+                $saving = Saving::create([
+                    'user_id' => $user->id,
+                    'saving_type' => 'pokok',
+                    'type' => 'tabungan',
+                    'amount' => $data['amount'],
+                    'date' => $data['joinOn'],
+                    'created_by' => $data['created_by'],
+                ]);
+
+                Transaction::create([
+                    'user_id' => $user->id,
+                    'saving_id' => $saving->id,
+                    'amount' => $data['amount'],
+                    'date' => $data['joinOn'],
+                    'created_by' => $data['created_by'],
                 ]);
             }
 
             DB::commit();
 
             Session::flash('success', 'Berhasil menambahkan user');
-            return redirect()->route('users.index');
+            return back();
         } catch (\Exception $e) {
 
             DB::rollback();
 
-            // Session::flash('error', $e);
-            Session::flash('success', 'Error saat melakukan input data');
+            Session::flash('error', $e->getMessage());
+            // Session::flash('error', 'Error saat melakukan input data');
             return back();
         }
     }

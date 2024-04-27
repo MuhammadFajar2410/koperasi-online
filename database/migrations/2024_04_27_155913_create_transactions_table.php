@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('loan_id')->nullable();
             $table->unsignedBigInteger('saving_id')->nullable();
             $table->string('amount');
-            $table->string('loan_transaction')->nullable();
+            $table->string('loan_collection')->nullable();
             $table->string('date');
             $table->string('created_by');
             $table->string('updated_by')->nullable();

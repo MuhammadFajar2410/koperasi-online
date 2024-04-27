@@ -17,7 +17,7 @@ return new class extends Migration
             $table->enum('saving_type', ['pokok', 'sukarela']);
             $table->enum('type',['penarikan', 'tabungan']);
             $table->bigInteger('amount');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('date');
             $table->string('created_by');
             $table->string('updated_by')->nullable();

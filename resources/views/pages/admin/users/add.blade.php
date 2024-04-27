@@ -62,7 +62,7 @@
                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Tanggal Bergabung <span class="text-danger">*</span></label>
-                            <input value="{{ old('joinOn') }}" type="text" name="joinOn" placeholder="Tanggal Bergabung" class="form-control" required>
+                            <input value="{{ old('joinOn') }}" type="date" name="joinOn" placeholder="Tanggal Bergabung" class="form-control" required>
                         </div>
                     </div>
 
@@ -99,6 +99,18 @@
                         <div class="form-group">
                             <label>Password</label>
                             <input name="password_confirmation" value="{{ old('password_confirmation') }}" type="password" class="form-control" placeholder="Konfirmasi Password">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="role_id">Jabatan: <span class="text-danger">*</span></label>
+                            <select name="role_id" class="select-search form-control" id="role_id" data-fouc data-placeholder="Choose.." required >
+                                <option value=""></option>
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                  </div>
