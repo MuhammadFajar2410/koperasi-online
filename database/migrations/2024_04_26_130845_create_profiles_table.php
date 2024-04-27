@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('nik')->nullable();
             $table->text('address')->nullable();
+            $table->enum('gender',['l', 'p']);
+            $table->string('job')->nullable();
             $table->string('phone')->nullable();
             $table->timestamps();
 

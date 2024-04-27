@@ -5,7 +5,7 @@
         <a href="#" class="sidebar-mobile-main-toggle">
             <i class="icon-arrow-left8"></i>
         </a>
-        Navigation
+    Navigation
         <a href="#" class="sidebar-mobile-expand">
             <i class="icon-screen-full"></i>
             <i class="icon-screen-normal"></i>
@@ -27,7 +27,7 @@
                     <div class="media-body">
                         <div class="media-title font-weight-semibold">{{ Auth::user()->profile->name }}</div>
                         <div class="font-size-xs opacity-50">
-                            <i class="icon-user font-size-sm"></i> &nbsp;{{ ucwords(str_replace('_', ' ', Auth::user()->role->name)) }}
+                            <i class="icon-user font-size-sm"></i> &nbsp;{{ ucwords(str_replace('_', ' ', Auth::user()->role->name ?? '')) }}
                         </div>
                     </div>
 

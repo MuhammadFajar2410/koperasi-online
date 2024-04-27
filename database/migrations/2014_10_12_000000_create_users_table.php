@@ -16,6 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('role_id')->nullable();
             $table->string('username')->unique();
             $table->boolean('status')->default(true);
+            $table->string('joinOn')->nullable();
+            $table->string('exitOn')->nullable();
+            $table->string('reason')->nullable();
             // $table->string('email')->unique();
             // $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

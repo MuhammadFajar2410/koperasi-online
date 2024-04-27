@@ -5,7 +5,7 @@
     <div class="card">
         @include('layouts.notification')
         <div class="card-header header-elements-inline">
-            <h6 class="card-title">Siswa Baru</h6>
+            <h6 class="card-title">Anggota Baru</h6>
             <div class="header-elements">
                 <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>
@@ -18,6 +18,20 @@
             @csrf
              <h6>Data diri</h6>
              <fieldset>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="name">Nama Lengkap :</label>
+                            <input type="text" id="name" value="{{ old('name') }}" name="name" class="form-control" placeholder="Nama Lengkap" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="address">Alamat Lengkap</label>
+                            <input type="text" id="address" value="{{ old('adddress') }}" name="address" class="form-control" placeholder="Alamat Lengkap" required>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
@@ -97,7 +111,7 @@
                      </div>
 
 
-                     <div class="col-md-3">
+                     {{-- <div class="col-md-3">
                         <div class="form-group">
                             <label for="nationality">Kewarganegaraan: <span class="text-danger">*</span></label>
                         <select class="select form-control" id="nationality" name="nationality" data-fouc data-placeholder="Choose.." required>
@@ -107,7 +121,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="col-md-3">
                         <div class="form-group">
@@ -127,7 +141,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    {{-- <div class="col-md-3">
                         <div class="form-group">
                             <label for="blood_type">Golongan Darah:</label>
                             <select class="select-search form-control" id="blood_type" name="blood_type" data-fouc data-placeholder="Choose..">
@@ -137,7 +151,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="col-md-6">
                         <div class="form-group">
@@ -241,7 +255,7 @@
 
                  <div class="row">
 
-                    <div class="col-md-3">
+                    {{-- <div class="col-md-3">
                         <div class="form-group">
                             <label for="class_id">Kelas:</label>
                             <select class="select-search form-control" id="class_id" name="class_id" data-fouc data-placeholder="Choose.." required>
@@ -251,7 +265,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="col-md-6">
                         <div class="form-group">

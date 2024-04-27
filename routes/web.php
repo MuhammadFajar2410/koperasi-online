@@ -47,4 +47,6 @@ Route::middleware(['auth', 'multirole:admin,ketua'])->group(function () {
     Route::get('jabatan/{id}',[RoleController::class,'edit'])->name('role.edit');
     Route::patch('jabatan/{id}',[RoleController::class,'update'])->name('role.update');
     Route::delete('jabatan/{id}',[RoleController::class,'destroy'])->name('role.destroy');
+
+    Route::get('user/add',[UserController::class,'addUser'])->name('add.user.view');
 });

@@ -23,6 +23,13 @@ class UserController extends Controller
         return view('pages.admin.users.index', compact('users', 'roles'));
     }
 
+    public function addUser()
+    {
+        $roles = Role::getActiveRole();
+        $genders = ['l' => 'Laki-Laki', 'p' => 'Perempuan'];
+        return view('pages.admin.users.add', compact('roles', 'genders'));
+    }
+
     public function adminAddUser(Request $request)
     {
         $this->validate($request, [
