@@ -62,7 +62,7 @@ class LoginController extends Controller
         try {
 
             $data = $request->all();
-            $data['created_by'] = 'MJR';
+            $data['created_by'] = 'system';
             $data['gender'] = 'l';
             // dd($data);
             DB::beginTransaction();

@@ -17,11 +17,12 @@ return new class extends Migration
             $table->string('amount');
             $table->string('date');
             $table->enum('type',['d','c']);
+            $table->string('description')->nullable();
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->timestamps();
 
-            $table->foreign('secondary_id')->references('id')->on('secondary_savings');
+            $table->foreign('primary_id')->references('id')->on('primary_savings');
         });
     }
 

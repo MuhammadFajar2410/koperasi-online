@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PrimarySaving;
+use App\Models\PrimarySavingDetail;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\Saving;
@@ -71,8 +72,14 @@ class UserController extends Controller
                     'created_by' => $data['created_by'],
                 ]);
 
-                PrimarySaving::create([
+                $primary = PrimarySaving::create([
                     'user_id' => $user->id,
+                    'amount' => $data['amount'],
+                    'created_by' => $data['created_by'],
+                ]);
+
+                PrimarySavingDetail::create([
+                    'primary_id' => $primary->id,
                     'amount' => $data['amount'],
                     'date' => $data['joinOn'],
                     'type' => 'd',
@@ -89,8 +96,8 @@ class UserController extends Controller
 
             DB::rollback();
 
-            Session::flash('error', $e->getMessage());
-            // Session::flash('error', 'Error saat melakukan input data');
+            // Session::flash('error', $e->getMessage());
+            Session::flash('error', 'Error saat melakukan input data');
             return back();
         }
     }

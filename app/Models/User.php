@@ -89,4 +89,11 @@ class User extends Authenticatable
         return User::with('role:id,name', 'profile:user_id,name')->get();
     }
 
+    public static function getActiveUser()
+    {
+        return User::with('profile:user_id,name')
+            ->where('status', true)
+            ->get();
+    }
+
 }

@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('amount');
-            $table->string('date');
-            $table->enum('type',['d','c']);
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->timestamps();

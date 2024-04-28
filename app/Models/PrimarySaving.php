@@ -23,6 +23,11 @@ class PrimarySaving extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function primary_detail()
+    {
+        return $this->hasMany(PrimarySavingDetail::class,'primary_id');
+    }
+
     public static function getPrimarySavings()
     {
         return PrimarySaving::with('user:id', 'user.profile:user_id,name,member_id')->get();
