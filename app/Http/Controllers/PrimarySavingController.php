@@ -18,7 +18,10 @@ class PrimarySavingController extends Controller
      */
     public function index()
     {
-        return view();
+        $savings = PrimarySavingDetail::getMemberSavingDetail(Auth::id());
+        $profile = PrimarySaving::getSingleMemberPrimarySaving(Auth::id());
+
+        return view('pages.member.primary_savings.index', compact('savings', 'profile'));
     }
 
     public function pIndexSaving()
@@ -80,9 +83,11 @@ class PrimarySavingController extends Controller
 
     public function withdraw(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'user_id' => 'required|exists:primary_savings,user_id',
             'amount' => 'required|min:0|numeric'
+        ], [
+            'user_id.exists' => 'Belum ada tabungan dari anggota ini. Silahkan cek history anggota.'
         ]);
 
         DB::beginTransaction();
@@ -92,27 +97,31 @@ class PrimarySavingController extends Controller
             $created_by = User::getUserLogin(Auth::id())->profile->name;
             $saldo = PrimarySaving::where('user_id', $data['user_id'])->first();
             $date = Carbon::now()->toDateString();
-            $saving_id = $saldo->id;
+            $saving_id = null;
+            $amount = 0; // Deklarasi awal variabel $amount
 
             if ($saldo) {
-                $amount = $saldo->amount - $data['amount'];
-            } else {
-                $amount = $data['amount'];
+                $saving_id = $saldo->id; // Pindahkan ini ke dalam blok if agar hanya dijalankan jika $saldo ditemukan
+                if ($saldo->amount >= $data['amount']) {
+                    $amount = $saldo->amount - $data['amount'];
+                } else {
+                    Session::flash('error', 'Saldo tidak mencukupi, jika ada kesalahan silahkan lakukan adjustment terlebih dahulu');
+                    return back(); // Kembalikan jika saldo tidak mencukupi
+                }
             }
 
-                $saldo->update([
-                    'amount' => $amount,
-                ]);
+            $saldo->update([
+                'amount' => $amount,
+            ]);
 
-                PrimarySavingDetail::create([
-                    'primary_id' => $saving_id,
-                    'amount' => $data['amount'],
-                    'date' => $date,
-                    'type' => 'c',
-                    'description' => $data['description'],
-                    'created_by' => $created_by
-                ]);
-
+            PrimarySavingDetail::create([
+                'primary_id' => $saving_id,
+                'amount' => $data['amount'],
+                'date' => $date,
+                'type' => 'c',
+                'description' => $data['description'],
+                'created_by' => $created_by
+            ]);
 
             DB::commit();
 
@@ -121,11 +130,11 @@ class PrimarySavingController extends Controller
         } catch(\Exception $e) {
             DB::rollback();
 
-            // Session::flash('error', $e->getMessage());
-            Session::flash('error', 'Error saat melakukan input data');
+            Session::flash('error', $e->getMessage());
             return back();
         }
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -149,7 +158,9 @@ class PrimarySavingController extends Controller
     public function show($id)
     {
         $savings = PrimarySavingDetail::getSinglePrimarySavingDetail($id);
-        return view('pages.member.primary_savings.show', compact('savings'));
+        $profile = PrimarySaving::getSinglePrimarySaving($id);
+        // dd($profile);
+        return view('pages.member.primary_savings.show', compact('savings', 'profile'));
     }
 
     /**

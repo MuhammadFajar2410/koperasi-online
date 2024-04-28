@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Symfony\Component\CssSelector\Node\FunctionNode;
 
 class PrimarySaving extends Model
 {
@@ -33,4 +34,20 @@ class PrimarySaving extends Model
         return PrimarySaving::with('user:id', 'user.profile:user_id,name,member_id')->get();
     }
 
+    public static function getSinglePrimarySaving($id)
+    {
+        return PrimarySaving::with('user:id', 'user.profile:user_id,name,member_id')
+            ->where('id', $id)
+            ->first();
+    }
+
+    public static function getSingleMemberPrimarySaving($id)
+    {
+        return PrimarySaving::with('user:id', 'user.profile:user_id,name,member_id')
+            ->whereHas('user', function ($query) use ($id){
+                $query->where('id', $id);
+            })
+            ->first();
+
+    }
 }

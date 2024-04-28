@@ -43,7 +43,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'dashboard'])->name('home');
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
-    Route::get('simpanan-pokok/{id}', [PrimarySavingController::class, 'show'])->name('primary.show');
+    Route::get('simpanan-pokok',[PrimarySavingController::class,'index'])->name('primary.member.index');
+
 
 });
 
@@ -67,6 +68,7 @@ Route::middleware(['auth', 'multirole:admin,ketua,pengurus'])->group(function ()
     Route::get('pengurus/simpanan-pokok',[PrimarySavingController::class,'pIndexSaving'])->name('primary.index');
     Route::post('pengurus/simpanan-pokok/saving',[PrimarySavingController::class,'saving'])->name('primary.saving');
     Route::post('pengurus/simpanan-pokok/withdraw',[PrimarySavingController::class,'withdraw'])->name('primary.withdraw');
+    Route::get('pengurus/simpanan-pokok/{id}', [PrimarySavingController::class, 'show'])->name('primary.show');
 
     Route::get('pengurus/simpanan-sukarela',[SecondarySavingController::class,'index'])->name('secondary.index');
 });

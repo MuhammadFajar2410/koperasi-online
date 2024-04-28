@@ -15,7 +15,7 @@
         </div>
 
         <div class="card-body">
-            <h5>Nama : <span class="font-weight-bold">{{ $profile->user->profile->name }}</span></h5>
+            <h5>Nama : <span class="font-weight-bold">{{ Auth::user()->profile->name }}</span></h5>
             <h5>Saldo :
                 <span class="font-weight-bold">
                     @if($profile)

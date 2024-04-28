@@ -86,9 +86,11 @@
                                 </li>
                         </ul>
                     </li>
-                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['primary.index', 'secondary.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
-                        <a href="#" class="nav-link"><i class="icon-windows2"></i><span>Transaksi</span></a>
-                        <ul class="nav nav-group-sub">
+                @endif
+                <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['primary.index', 'secondary.index', 'primary.member.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
+                    <a href="#" class="nav-link"><i class="icon-windows2"></i><span>Transaksi</span></a>
+                    <ul class="nav nav-group-sub">
+                        @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua' || Auth::user()->role->name == 'pengurus' ))
                             <li class="nav-item">
                                 <a href="{{ route('primary.index') }}" class="nav-link
                                 {{ (Route::is('primary.index')) ? 'active' : ''}}">Transaksi Simpanan Pokok</a>
@@ -97,9 +99,13 @@
                                 <a href="{{ route('secondary.index') }}" class="nav-link
                                 {{ (Route::is('secondary.index')) ? 'active' : ''}}">Transaksi Simpanan Sukarela</a>
                             </li>
-                        </ul>
-                    </li>
-                @endif
+                        @endif
+                            <li class="nav-item">
+                                <a href="{{ route('primary.member.index') }}" class="nav-link
+                                {{ (Route::is('primary.member.index')) ? 'active' : ''}}">Simpanan Pokok</a>
+                            </li>
+                    </ul>
+                </li>
                     <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['students.index', 'students.add.index']) ? 'nav-item-expanded nav-item-open' : '' }} ">
                         <a href="javascript:void(0)" class="nav-link"><i class="icon-users"></i> <span>Kesiswaan</span></a>
 

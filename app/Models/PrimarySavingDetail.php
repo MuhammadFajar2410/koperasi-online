@@ -35,7 +35,17 @@ class PrimarySavingDetail extends Model
     {
         return PrimarySavingDetail::with('primary_saving:id')
             ->where('primary_id', $id)
-            ->orderBy('date', 'DESC')
+            ->orderBy('created_at', 'DESC')
             ->get();
     }
+
+    public static function getMemberSavingDetail($id)
+    {
+        return PrimarySavingDetail::with('primary_saving:id', 'primary_saving.user:id')
+            ->whereHas('primary_saving.user', function ($query) use ($id) {
+                $query->where('id', $id);
+            })
+            ->get();
+    }
+
 }
