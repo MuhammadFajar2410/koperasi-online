@@ -14,6 +14,7 @@ class RoleTableSeeder extends Seeder
     public function run(): void
     {
         Role::create(['name' => 'anggota']);
+        Role::create(['name' => 'pengurus']);
         Role::create(['name' => 'ketua']);
         Role::create(['name' => 'admin']);
     }

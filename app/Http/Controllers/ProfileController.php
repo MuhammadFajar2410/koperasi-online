@@ -12,7 +12,9 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        //
+        $profiles = Profile::getAllProfiles();
+        // dd($profiles);
+        return view('pages.pengurus.members.index', compact('profiles'));
     }
 
     /**

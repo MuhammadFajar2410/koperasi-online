@@ -58,45 +58,44 @@
                 {{-- @php
                     $user_role = User::with('roles')
                 @endphp --}}
-                @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua'))
+                @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua' || Auth::user()->role->name == 'pengurus'))
                     {{-- <li class="nav-item {{ in_array(Route::currentRouteName(), ['classroom.index']) ? 'nav-item-expanded nav-item-open' : '' }} ">
                         <a href="{{ route('classroom.index') }}" class="nav-link"><i class="icon-windows2"></i> <span>Kelas</span></a>
                     </li> --}}
-                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['role.index', 'user.index', 'add.user.view']) ? 'nav-item-expanded nav-item-open' : '' }}">
+
+                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['role.index', 'user.index', 'add.user.view', 'member.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
                         <a href="#" class="nav-link"><i class="icon-windows2"></i><span>Manajemen Anggota</span></a>
                         <ul class="nav nav-group-sub">
-                            <li class="nav-item">
-                                <a href="{{ route('role.index') }}" class="nav-link
-                                {{ (Route::is('role.index')) ? 'active' : ''}}">Jabatan</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('add.user.view') }}" class="nav-link
-                                {{ (Route::is('add.user.view')) ? 'active' : ''}}">Anggota Baru</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('user.index') }}" class="nav-link
-                                {{ (Route::is('user.index')) ? 'active' : ''}}">Users</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['assessment.index', 'score.index', 'student.assessment.index' ]) ? 'nav-item-expanded nav-item-open' : '' }}" >
-                        <a href="#" class="nav-link"><i class="icon-book"></i><span>Transaksi</span></a>
-                        <ul class="nav nav-group-sub">
-                            @if(Auth::user() && (Auth::user()->role == 'admin' || Auth::user()->role == 'kepala_sekolah'))
-                                {{-- Standar dari Nilai  --}}
+                            @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua'))
                                 <li class="nav-item">
-                                    <a href="{{ url('score.index') }}"
-                                    class="nav-link {{ (Route::is('score.index')) ? 'active' : '' }}">Standar Penilaian</a>
+                                    <a href="{{ route('role.index') }}" class="nav-link
+                                    {{ (Route::is('role.index')) ? 'active' : ''}}">Jabatan</a>
                                 </li>
-                                    {{-- Penilaian dan Mata Pelajaran --}}
                                 <li class="nav-item">
-                                    <a href="{{ url('assessment.index') }}"
-                                    class="nav-link {{ (Route::is('assessment.index')) ? 'active' : '' }}">Penilaian</a>
+                                 <a href="{{ route('user.index') }}" class="nav-link
+                                    {{ (Route::is('user.index')) ? 'active' : ''}}">Users</a>
                                 </li>
                             @endif
+                                <li class="nav-item">
+                                    <a href="{{ route('add.user.view') }}" class="nav-link
+                                    {{ (Route::is('add.user.view')) ? 'active' : ''}}">Anggota Baru</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('member.index') }}" class="nav-link
+                                    {{ (Route::is('member.index')) ? 'active' : ''}}">Semua Anggota</a>
+                                </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['primary.index', 'secondary.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
+                        <a href="#" class="nav-link"><i class="icon-windows2"></i><span>Transaksi</span></a>
+                        <ul class="nav nav-group-sub">
                             <li class="nav-item">
-                                <a href="{{ url('student.assessment.index') }}"
-                                class="nav-link {{ (Route::is('student.assessment.index')) ? 'active' : '' }}">Penilaian Siswa</a>
+                                <a href="{{ route('primary.index') }}" class="nav-link
+                                {{ (Route::is('primary.index')) ? 'active' : ''}}">Transaksi Simpanan Pokok</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('secondary.index') }}" class="nav-link
+                                {{ (Route::is('secondary.index')) ? 'active' : ''}}">Transaksi Simpanan Sukarela</a>
                             </li>
                         </ul>
                     </li>

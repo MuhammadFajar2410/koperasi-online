@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PrimarySaving;
+use App\Models\LoanDetail;
 use Illuminate\Http\Request;
 
-class PrimarySavingController extends Controller
+class LoanDetailController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $savings = PrimarySaving::getPrimarySavings();
-        // dd($savings);
-        return view('pages.pengurus.primary_savings.index', compact('savings'));
+        //
     }
 
     /**
@@ -36,7 +34,7 @@ class PrimarySavingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PrimarySaving $primarySaving)
+    public function show(LoanDetail $loanDetail)
     {
         //
     }
@@ -44,7 +42,7 @@ class PrimarySavingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PrimarySaving $primarySaving)
+    public function edit(LoanDetail $loanDetail)
     {
         //
     }
@@ -52,7 +50,7 @@ class PrimarySavingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, PrimarySaving $primarySaving)
+    public function update(Request $request, LoanDetail $loanDetail)
     {
         //
     }
@@ -60,7 +58,7 @@ class PrimarySavingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PrimarySaving $primarySaving)
+    public function destroy(LoanDetail $loanDetail)
     {
         //
     }

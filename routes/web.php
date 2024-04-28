@@ -4,13 +4,17 @@ use App\Http\Controllers\AssesmentController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PrimarySavingController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScoreController;
+use App\Http\Controllers\SecondarySavingController;
 use App\Http\Controllers\StudentAssessmentController;
 use App\Http\Controllers\StudentClassroomController;
 use App\Http\Controllers\StudentProfileController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
+use App\Models\PrimarySaving;
 use App\Models\StudentClassroom;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +42,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'dashboard'])->name('home');
     Route::get('/home', [HomeController::class, 'dashboard'])->name('home');
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+
+
 });
 
 
@@ -49,6 +55,15 @@ Route::middleware(['auth', 'multirole:admin,ketua'])->group(function () {
     Route::delete('jabatan/{id}',[RoleController::class,'destroy'])->name('role.destroy');
 
     Route::get('users',[UserController::class,'index'])->name('user.index');
+});
+
+Route::middleware(['auth', 'multirole:admin,ketua,pengurus'])->group(function () {
     Route::get('users/add',[UserController::class,'addUser'])->name('add.user.view');
     Route::post('users/add',[UserController::class,'adminAddUser'])->name('add.user');
+
+    Route::get('anggota', [ProfileController::class, 'index'])->name('member.index');
+
+    Route::get('pengurus/simpanan-pokok',[PrimarySavingController::class,'index'])->name('primary.index');
+
+    Route::get('pengurus/simpanan-sukarela',[SecondarySavingController::class,'index'])->name('secondary.index');
 });

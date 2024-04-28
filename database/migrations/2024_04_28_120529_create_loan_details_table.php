@@ -11,19 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('savings', function (Blueprint $table) {
+        Schema::create('loan_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->enum('saving_type', ['pokok', 'sukarela']);
-            $table->enum('type',['penarikan', 'tabungan']);
-            $table->bigInteger('amount');
-            $table->text('description')->nullable();
+            $table->unsignedBigInteger('loan_id')->nullable();
+            $table->string('amount');
             $table->string('date');
+            $table->enum('type',['d', 'c']);
+            $table->string('description')->nullable();
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('loan_id')->references('id')->on('loans');
         });
     }
 
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('savings');
+        Schema::dropIfExists('loan_details');
     }
 };

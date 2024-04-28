@@ -26,4 +26,9 @@ class Profile extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public static function getAllProfiles()
+    {
+        return Profile::get();
+    }
 }

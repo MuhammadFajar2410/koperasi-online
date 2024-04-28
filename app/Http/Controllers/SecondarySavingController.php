@@ -12,7 +12,8 @@ class SecondarySavingController extends Controller
      */
     public function index()
     {
-        //
+        $savings = SecondarySaving::getSecondarySavings();
+        return view('pages.pengurus.secondary_saving.index', compact('savings'));
     }
 
     /**

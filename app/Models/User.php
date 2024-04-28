@@ -51,6 +51,8 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    // Relasi
+
     public function role()
     {
         return $this->belongsTo(Role::class,'role_id');
@@ -60,6 +62,20 @@ class User extends Authenticatable
     {
         return $this->hasOne(Profile::class, 'user_id');
     }
+
+    public function primary_saving()
+    {
+        return $this->hasMany(PrimarySaving::class,'user_id');
+    }
+
+    public function secondary_saving()
+    {
+        return $this->hasMany(SecondarySaving::class,'user_id');
+    }
+
+
+
+    // Transaksi DB
 
     public static function getUserLogin($user_id)
     {
