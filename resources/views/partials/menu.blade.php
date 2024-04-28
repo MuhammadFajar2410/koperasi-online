@@ -62,17 +62,25 @@
                     {{-- <li class="nav-item {{ in_array(Route::currentRouteName(), ['classroom.index']) ? 'nav-item-expanded nav-item-open' : '' }} ">
                         <a href="{{ route('classroom.index') }}" class="nav-link"><i class="icon-windows2"></i> <span>Kelas</span></a>
                     </li> --}}
-                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), []) ? 'nav-item-expanded nav-item-open' : '' }}">
-                        <a href="#" class="nav-link"><i class="icon-windows2"></i><span>User Manajemen</span></a>
+                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['role.index', 'user.index', 'add.user.view']) ? 'nav-item-expanded nav-item-open' : '' }}">
+                        <a href="#" class="nav-link"><i class="icon-windows2"></i><span>Manajemen Anggota</span></a>
                         <ul class="nav nav-group-sub">
                             <li class="nav-item">
                                 <a href="{{ route('role.index') }}" class="nav-link
                                 {{ (Route::is('role.index')) ? 'active' : ''}}">Jabatan</a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('add.user.view') }}" class="nav-link
+                                {{ (Route::is('add.user.view')) ? 'active' : ''}}">Anggota Baru</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('user.index') }}" class="nav-link
+                                {{ (Route::is('user.index')) ? 'active' : ''}}">Users</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['assessment.index', 'score.index', 'student.assessment.index' ]) ? 'nav-item-expanded nav-item-open' : '' }}" >
-                        <a href="#" class="nav-link"><i class="icon-book"></i><span>Mapel dan Penilaian</span></a>
+                        <a href="#" class="nav-link"><i class="icon-book"></i><span>Transaksi</span></a>
                         <ul class="nav nav-group-sub">
                             @if(Auth::user() && (Auth::user()->role == 'admin' || Auth::user()->role == 'kepala_sekolah'))
                                 {{-- Standar dari Nilai  --}}

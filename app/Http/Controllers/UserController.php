@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PrimarySaving;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\Saving;
@@ -22,8 +23,8 @@ class UserController extends Controller
     {
         $users = User::getUsers();
         // dd($users);
-        $roles = Role::getActiveRole();
-        return view('pages.admin.users.index', compact('users', 'roles'));
+        // $roles = Role::getActiveRole();
+        return view('pages.admin.users.index', compact('users'));
     }
 
     public function addUser()
@@ -70,22 +71,14 @@ class UserController extends Controller
                     'created_by' => $data['created_by'],
                 ]);
 
-                $saving = Saving::create([
+                PrimarySaving::create([
                     'user_id' => $user->id,
-                    'saving_type' => 'pokok',
-                    'type' => 'tabungan',
                     'amount' => $data['amount'],
                     'date' => $data['joinOn'],
+                    'type' => 'd',
                     'created_by' => $data['created_by'],
                 ]);
 
-                Transaction::create([
-                    'user_id' => $user->id,
-                    'saving_id' => $saving->id,
-                    'amount' => $data['amount'],
-                    'date' => $data['joinOn'],
-                    'created_by' => $data['created_by'],
-                ]);
             }
 
             DB::commit();

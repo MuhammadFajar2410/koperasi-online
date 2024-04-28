@@ -11,21 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('secondary_savings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('loan_id')->nullable();
-            $table->unsignedBigInteger('saving_id')->nullable();
             $table->string('amount');
-            $table->string('loan_collection')->nullable();
             $table->string('date');
+            $table->enum('type',['d','c']);
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('loan_id')->references('id')->on('loans');
-            $table->foreign('saving_id')->references('id')->on('savings');
         });
     }
 
@@ -34,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('secondary_savings');
     }
 };

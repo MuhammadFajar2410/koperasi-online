@@ -70,7 +70,7 @@ class User extends Authenticatable
 
     public static function getUsers()
     {
-        return User::get();
+        return User::with('role:id,name', 'profile:user_id,name')->get();
     }
 
 }

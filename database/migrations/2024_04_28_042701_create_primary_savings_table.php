@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('loans', function (Blueprint $table) {
+        Schema::create('primary_savings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->enum('loan_type', ['uang', 'barang']);
-            $table->string('loan_amount');
-            $table->string('loan_interest');
-            $table->string('total_amount');
-            $table->string('period');
+            $table->string('amount');
+            $table->string('date');
             $table->enum('type',['d','c']);
             $table->string('created_by');
             $table->string('updated_by')->nullable();
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('loans');
+        Schema::dropIfExists('primary_savings');
     }
 };
