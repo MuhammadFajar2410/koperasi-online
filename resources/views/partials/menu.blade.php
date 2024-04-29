@@ -57,7 +57,7 @@
                 <!--Users-->
                 @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua' || Auth::user()->role->name == 'pengurus'))
                     <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['role.index', 'user.index', 'add.user.view', 'member.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
-                        <a href="#" class="nav-link"><i class="icon-windows2"></i><span>Manajemen Anggota</span></a>
+                        <a href="#" class="nav-link"><i class="icon-person"></i><span>Manajemen Anggota</span></a>
                         <ul class="nav nav-group-sub">
                             @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua'))
                                 <li class="nav-item">
@@ -103,17 +103,46 @@
                                 </li>
                         </ul>
                     </li>
-                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['loan.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
-                        <a href="#" class="nav-link"><i class="icon-windows2"></i><span>Pinjaman</span></a>
+                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['loan.index', 'loan.member.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
+                        <a href="#" class="nav-link"><i class="icon-book3"></i><span>Pinjaman</span></a>
                         <ul class="nav nav-group-sub">
                             @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua' || Auth::user()->role->name == 'pengurus' ))
                                 <li class="nav-item">
                                     <a href="{{ route('loan.index') }}" class="nav-link
                                     {{ (Route::is('loan.index')) ? 'active' : ''}}">Pinjaman Anggota</a>
                                 </li>
-                            @endif
+                                @endif
+                                <li class="nav-item">
+                                    <a href="{{ route('loan.member.index') }}" class="nav-link
+                                    {{ (Route::is('loan.member.index')) ? 'active' : ''}}">Pinjaman</a>
+                                </li>
                         </ul>
                     </li>
+                    @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua' || Auth::user()->role->name == 'pengurus'))
+                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['role.index', 'user.index', 'add.user.view', 'member.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
+                        <a href="#" class="nav-link"><i class="icon-windows2"></i><span>Manajemen Anggota</span></a>
+                        <ul class="nav nav-group-sub">
+                            @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua'))
+                                <li class="nav-item">
+                                    <a href="{{ route('role.index') }}" class="nav-link
+                                    {{ (Route::is('role.index')) ? 'active' : ''}}">Jabatan</a>
+                                </li>
+                                <li class="nav-item">
+                                 <a href="{{ route('user.index') }}" class="nav-link
+                                    {{ (Route::is('user.index')) ? 'active' : ''}}">Users</a>
+                                </li>
+                            @endif
+                                <li class="nav-item">
+                                    <a href="{{ route('add.user.view') }}" class="nav-link
+                                    {{ (Route::is('add.user.view')) ? 'active' : ''}}">Anggota Baru</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('member.index') }}" class="nav-link
+                                    {{ (Route::is('member.index')) ? 'active' : ''}}">Semua Anggota</a>
+                                </li>
+                        </ul>
+                    </li>
+                @endif
                 </ul>
             </div>
         </div>

@@ -35,8 +35,8 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nominal</th>
-                                <th>Transaksi</th>
+                                <th>Debit</th>
+                                <th>Kredit</th>
                                 <th>Tanggal</th>
                                 <th>Keterangan</th>
                                 <th>Dibuat Oleh</th>
@@ -49,8 +49,8 @@
                             @foreach($savings as $s)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ 'Rp. ' . number_format($s->amount, 0, ',', '.') }}</td>
-                                    <td class="{{ $s->type == 'd' ? 'text-primary' : 'text-danger' }}">{{ $s->type == 'd' ? 'Debit' : 'Kredit' }}</td>
+                                    <td class="text-primary">{{ $s->type == 'd' ? 'Rp. ' . number_format($s->amount, 0, ',', '.') : '' }}</td>
+                                    <td class="text-danger">{{ $s->type == 'c' ? 'Rp. ' . number_format($s->amount, 0, ',', '.') : '' }}</td>
                                     <td>{{ $s->date }}</td>
                                     <td>{{ $s->description ?? '' }}</td>
                                     <td>{{ $s->created_by }}</td>

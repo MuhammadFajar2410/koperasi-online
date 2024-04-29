@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('date');
             $table->enum('type',['d', 'c']);
             $table->string('description')->nullable();
+            $table->string('latest_amount');
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->timestamps();

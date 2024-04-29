@@ -15,6 +15,7 @@ class SecondarySavingDetail extends Model
         'date',
         'type',
         'description',
+        'latest_amount',
         'created_by',
         'updated_by'
     ];
@@ -45,6 +46,7 @@ class SecondarySavingDetail extends Model
             ->whereHas('secondary_saving.user', function ($query) use ($id) {
                 $query->where('id', $id);
             })
+            ->orderBy('created_at', 'DESC')
             ->get();
     }
 }

@@ -27,8 +27,9 @@ class LoanController extends Controller
     public function memberShow($id)
     {
         $profile = Loan::getSingleLoan($id);
-        $loans = LoanDetail::getMemberLoanDetail(Auth::id(),$id);
-        dd($loans);
+        $loans = LoanDetail::getmemberLoanDetails(Auth::id(), $id);
+        // dd($loans);
+
         if(!$profile){
             abort(404);
         }
@@ -82,6 +83,7 @@ class LoanController extends Controller
                 'amount' => $total_amount,
                 'date' => $date,
                 'type' => 'c',
+                'latest_amount' => $total_amount,
                 'description' => $data['description'],
                 'created_by' => $created_by
             ]);
@@ -139,6 +141,7 @@ class LoanController extends Controller
                 'date' => $date,
                 'type' => 'd',
                 'description' => $data['description'],
+                'latest_amount' => $remaining_loan,
                 'created_by' => $created_by
             ]);
 

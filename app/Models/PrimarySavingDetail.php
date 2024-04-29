@@ -14,6 +14,7 @@ class PrimarySavingDetail extends Model
         'amount',
         'date',
         'type',
+        'latest_amount',
         'created_by',
         'updated_by',
         'description'
@@ -45,6 +46,7 @@ class PrimarySavingDetail extends Model
             ->whereHas('primary_saving.user', function ($query) use ($id) {
                 $query->where('id', $id);
             })
+            ->orderBy('created_at', 'DESC')
             ->get();
     }
 

@@ -83,6 +83,7 @@ class UserController extends Controller
                     'amount' => $data['amount'],
                     'date' => $data['joinOn'],
                     'type' => 'd',
+                    'latest_amount' => $data['amount'],
                     'created_by' => $data['created_by'],
                 ]);
 

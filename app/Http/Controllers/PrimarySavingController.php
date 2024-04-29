@@ -65,6 +65,7 @@ class PrimarySavingController extends Controller
                     'date' => $date,
                     'type' => 'd',
                     'description' => $data['description'],
+                    'latest_amount' => $amount,
                     'created_by' => $created_by
                 ]);
 
@@ -121,6 +122,7 @@ class PrimarySavingController extends Controller
                 'date' => $date,
                 'type' => 'c',
                 'description' => $data['description'],
+                'latest_amount' => $amount,
                 'created_by' => $created_by
             ]);
 

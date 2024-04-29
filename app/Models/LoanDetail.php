@@ -15,6 +15,7 @@ class LoanDetail extends Model
         'date',
         'type',
         'description',
+        'latest_amount',
         'created_by',
         'updated_by'
     ];
@@ -29,16 +30,18 @@ class LoanDetail extends Model
     {
         return LoanDetail::with('loan')
             ->where('loan_id', $id)
+            ->orderBy('created_at', 'DESC')
             ->get();
     }
 
-    public static function getMemberLoanDetail($user_id, $id)
+    public static function getmemberLoanDetails($user_id, $id)
     {
-        return LoanDetail::with('loan.user')
+        return LoanDetail::with('loan.user.profile')
+            ->where('loan_id', $id)
             ->whereHas('loan.user', function ($query) use ($user_id){
                 $query->where('id', $user_id);
             })
-            ->where('id', $id)
+            ->orderBy('created_at', 'DESC')
             ->get();
     }
 }

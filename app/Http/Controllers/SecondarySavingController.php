@@ -77,6 +77,7 @@ class SecondarySavingController extends Controller
                 'date' => $date,
                 'type' => 'd',
                 'description' => $data['description'],
+                'latest_amount' => $amount,
                 'created_by' => $created_by
             ]);
 
@@ -131,6 +132,7 @@ class SecondarySavingController extends Controller
                 'date' => $date,
                 'type' => 'c',
                 'description' => $data['description'],
+                'latest_amount' => $amount,
                 'created_by' => $created_by
             ]);
 
@@ -177,7 +179,7 @@ class SecondarySavingController extends Controller
         }
 
 
-        return view('pages.pengurus.primary_savings.show', compact('savings', 'profile'));
+        return view('pages.pengurus.secondary_savings.show', compact('savings', 'profile'));
     }
 
     /**

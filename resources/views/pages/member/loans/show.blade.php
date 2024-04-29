@@ -44,8 +44,9 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nominal</th>
-                                <th>Transaksi</th>
+                                <th>Debit</th>
+                                <th>Kredit</th>
+                                <th>Sisa</th>
                                 <th>Tanggal</th>
                                 <th>Keterangan</th>
                                 <th>Dibuat Oleh</th>
@@ -58,9 +59,10 @@
                             @foreach($loans as $l)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ 'Rp. ' . number_format($l->remaining_loan, 0, ',', '.') }}</td>
-                                    <td class="{{ $l->type == 'd' ? 'text-primary' : 'text-danger' }}">{{ $l->type == 'd' ? 'Debit' : 'Kredit' }}</td>
-                                    <td>{{ $l->loan_detail->date }}</td>
+                                    <td class="text-primary">{{ $l->type == 'd' ? 'Rp. ' . number_format($l->amount, 0, ',', '.') : '' }}</td>
+                                    <td class="text-danger">{{ $l->type == 'c' ? 'Rp. ' . number_format($l->amount, 0, ',', '.') : '' }}</td>
+                                    <td>{{ 'Rp. ' . number_format($l->latest_amount, 0, ',', '.') }}</td>
+                                    <td>{{ $l->date }}</td>
                                     <td>{{ $l->description ?? '' }}</td>
                                     <td>{{ $l->created_by }}</td>
                                 </tr>
