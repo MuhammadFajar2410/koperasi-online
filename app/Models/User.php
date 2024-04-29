@@ -73,6 +73,10 @@ class User extends Authenticatable
         return $this->hasMany(SecondarySaving::class,'user_id');
     }
 
+    public function loan()
+    {
+        return $this->hasMany(Loan::class,'user_id');
+    }
 
 
     // Transaksi DB

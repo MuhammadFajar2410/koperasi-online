@@ -29,6 +29,6 @@ class Profile extends Model
 
     public static function getAllProfiles()
     {
-        return Profile::get();
+        return Profile::with('user:id,status,exitOn,joinOn,reason')->get();
     }
 }

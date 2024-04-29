@@ -1,11 +1,11 @@
 @extends('layouts.master')
-@section('page_title', 'Simpanan Pokok')
+@section('page_title', 'Pinjaman')
 @section('content')
 
     <div class="card">
         @include('layouts.notification')
         <div class="card-header header-elements-inline">
-            <h6 class="card-title">Simpanan Pokok</h6>
+            <h6 class="card-title">Pinjaman Anggota</h6>
             <div class="header-elements">
                 <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>
@@ -17,8 +17,8 @@
         <div class="card-body">
             <ul class="nav nav-tabs nav-tabs-highlight">
                 <li class="nav-item"><a href="#all-classes" class="nav-link active" data-toggle="tab">List Transaksi</a></li>
-                <li class="nav-item"><a href="#menabung" class="nav-link" data-toggle="tab"> Menabung</a></li>
-                <li class="nav-item"><a href="#menarik" class="nav-link" data-toggle="tab"> Penarikan</a></li>
+                <li class="nav-item"><a href="#menabung" class="nav-link" data-toggle="tab"> Pinjaman</a></li>
+                <li class="nav-item"><a href="#menarik" class="nav-link" data-toggle="tab"> Pembayaran</a></li>
             </ul>
 
             <div class="tab-content">
@@ -29,23 +29,26 @@
                                     <th>No</th>
                                     <th>No. Anggota</th>
                                     <th>Nama</th>
-                                    <th>Nominal</th>
-                                    <th>Tanggal</th>
-                                    <th>Dibuat Oleh</th>
+                                    <th>Pinjaman</th>
+                                    <th>Jasa</th>
+                                    <th>Total</th>
+                                    <th>Periode</th>
+                                    <th>Sisa</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                        @if ($savings)
-
-                            @foreach($savings as $s)
+                        @if ($loans)
+                            @foreach($loans as $l)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $s->user->profile->member_id ?? '' }}</td>
-                                    <td>{{ $s->user->profile->name ?? ''}}</td>
-                                    <td>{{ 'Rp. ' . number_format($s->amount, 0, ',', '.') }}</td>
-                                    <td>{{ $s->date }}</td>
-                                    <td>{{ $s->created_by }}</td>
+                                    <td>{{ $l->user->profile->member_id }}</td>
+                                    <td>{{ $l->user->profile->name }}</td>
+                                    <td>{{ 'Rp. ' . number_format($l->loan_amount, 0, ',', '.') }}</td>
+                                    <td>{{ $l->loan_interest . '%' }}</td>
+                                    <td>{{ 'Rp. ' . number_format($l->total_amount, 0, ',', '.') }}</td>
+                                    <td>{{ $l->period }}</td>
+                                    <td>{{ 'Rp. ' . number_format($l->remaining_loan, 0, ',', '.') }}</td>
                                     <td class="text-center">
                                         <div class="list-icons">
                                             <div class="dropdown">
@@ -56,7 +59,7 @@
                                                 <div class="dropdown-menu dropdown-menu-left">
 
 
-                                                    <a href="{{ route('primary.show', $s->id) }}" class="dropdown-item"><i class="icon-eye"></i> Detail</a>
+                                                    <a href="{{ route('primary.show', $l->id) }}" class="dropdown-item"><i class="icon-eye"></i> Detail</a>
 
 
                                                     {{-- <a id="{{ $u->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
@@ -81,7 +84,7 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <form method="POST" action="{{ route('primary.saving') }}">
+                                <form method="POST" action="{{ route('loan.add') }}">
                                     @csrf
                                     <div class="form-group row">
                                         <label class="col-lg-12 col-form-label font-weight-semibold">Nama Anggota <span class="text-danger">*</span></label>
@@ -94,8 +97,18 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-lg-12 col-form-label font-weight-semibold">Nominal <span class="text-danger">*</span></label>
+                                        <label class="col-lg-12 col-form-label font-weight-semibold">Nominal Pinjaman <span class="text-danger">*</span></label>
                                         <input type="number" name="amount" class="form-control" min="1" required>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-lg-12 col-form-label font-weight-semibold">Jasa Pinjaman dalam persentase <span class="text-danger">*</span></label>
+                                        <input type="number" name="interest" class="form-control" min="0" max="100" required>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-lg-12 col-form-label font-weight-semibold">Periode Pinjaman <span class="text-danger">*</span></label>
+                                        <input type="text" name="period" class="form-control" required>
                                     </div>
 
                                     <div class="form-group row">
@@ -119,7 +132,7 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <form method="POST" action="{{ route('primary.withdraw') }}">
+                                <form method="POST" action="{{ route('loan.installment') }}">
                                     @csrf
                                     <div class="form-group row">
                                         <label class="col-lg-12 col-form-label font-weight-semibold">Nama Anggota <span class="text-danger">*</span></label>
@@ -132,8 +145,18 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-lg-12 col-form-label font-weight-semibold">Nominal <span class="text-danger">*</span></label>
+                                        <label class="col-lg-12 col-form-label font-weight-semibold">Nominal Pinjaman <span class="text-danger">*</span></label>
                                         <input type="number" name="amount" class="form-control" min="1" required>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-lg-12 col-form-label font-weight-semibold">Jasa Pinjaman dalam persentase <span class="text-danger">*</span></label>
+                                        <input type="number" name="loan_interest" class="form-control" min="0" max="100" required>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-lg-12 col-form-label font-weight-semibold">Tanggal Pinjaman <span class="text-danger">*</span></label>
+                                        <input type="date" name="date" class="form-control" required>
                                     </div>
 
                                     <div class="form-group row">

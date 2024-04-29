@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PrimarySaving;
 use App\Models\SecondarySaving;
+use App\Models\SecondarySavingDetail;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class SecondarySavingController extends Controller
 {
@@ -12,9 +19,133 @@ class SecondarySavingController extends Controller
      */
     public function index()
     {
-        $savings = SecondarySaving::getSecondarySavings();
-        return view('pages.pengurus.secondary_saving.index', compact('savings'));
+        $savings = SecondarySavingDetail::getMemberSavingDetail(Auth::id());
+        $profile = SecondarySaving::getSingleMemberSecondarySaving(Auth::id());
+
+        return view('pages.member.secondary_savings.index', compact('savings', 'profile'));
     }
+
+    public function pIndexSaving()
+    {
+        $savings = SecondarySaving::getSecondarySavings();
+        $profiles = User::getActiveUser();
+        $allProfiles = User::getUsers();
+
+        return view('pages.pengurus.secondary_savings.index', compact('savings', 'profiles', 'allProfiles'));
+    }
+
+    public function saving(Request $request)
+    {
+        $this->validate($request, [
+            'user_id' => 'required|exists:users,id',
+            'amount' => 'required|min:0|numeric'
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $data = $request->all();
+            $created_by = User::getUserLogin(Auth::id())->profile->name;
+            $saldo = SecondarySaving::where('user_id', $data['user_id'])->first();
+            $date = Carbon::now()->toDateString();
+
+            if ($saldo) {
+                $amount = $saldo->amount + $data['amount'];
+            } else {
+                $amount = $data['amount'];
+            }
+
+            if ($saldo) {
+                $saldo->update([
+                    'amount' => $amount,
+                ]);
+
+                $saving_id = $saldo->id;
+            } else {
+                $secondary_saving = SecondarySaving::create([
+                    'user_id' => $data['user_id'],
+                    'amount' => $data['amount'],
+                    'created_by' => $created_by,
+                ]);
+
+                $saving_id = $secondary_saving->id;
+            }
+
+            SecondarySavingDetail::create([
+                'secondary_id' => $saving_id,
+                'amount' => $data['amount'],
+                'date' => $date,
+                'type' => 'd',
+                'description' => $data['description'],
+                'created_by' => $created_by
+            ]);
+
+            DB::commit();
+
+            Session::flash('success', 'Berhasil menambahkan tabungan anggota');
+            return redirect()->route('secondary.index');
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Session::flash('error', $e->getMessage());
+            return back();
+        }
+    }
+
+    public function withdraw(Request $request)
+    {
+        $this->validate($request, [
+            'user_id' => 'required|exists:users,id',
+            'amount' => 'required|min:0|numeric'
+        ], [
+            'user_id.exists' => 'Belum ada tabungan dari anggota ini. Silahkan cek history anggota.'
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $data = $request->all();
+            $created_by = User::getUserLogin(Auth::id())->profile->name;
+            $saldo = SecondarySaving::where('user_id', $data['user_id'])->first();
+            $date = Carbon::now()->toDateString();
+            $saving_id = null;
+            $amount = 0;
+
+            if ($saldo) {
+                $saving_id = $saldo->id;
+                if ($saldo->amount >= $data['amount']) {
+                    $amount = $saldo->amount - $data['amount'];
+                } else {
+                    Session::flash('error', 'Saldo tidak mencukupi, jika ada kesalahan silahkan lakukan adjustment terlebih dahulu');
+                    return back();
+                }
+            }
+
+            $saldo->update([
+                'amount' => $amount,
+            ]);
+
+            SecondarySavingDetail::create([
+                'secondary_id' => $saving_id,
+                'amount' => $data['amount'],
+                'date' => $date,
+                'type' => 'c',
+                'description' => $data['description'],
+                'created_by' => $created_by
+            ]);
+
+            DB::commit();
+
+            Session::flash('success', 'Berhasil melakukan penarikan tabungan anggota');
+            return redirect()->route('secondary.index');
+        } catch(\Exception $e) {
+            DB::rollback();
+
+            Session::flash('error', $e->getMessage());
+            return back();
+        }
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -35,9 +166,12 @@ class SecondarySavingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(SecondarySaving $secondarySaving)
+    public function show($id)
     {
-        //
+        $savings = SecondarySavingDetail::getSingleSecondarySavingDetail($id);
+        $profile = SecondarySaving::getSingleSecondarySaving($id);
+        // dd($profile);
+        return view('pages.pengurus.primary_savings.show', compact('savings', 'profile'));
     }
 
     /**

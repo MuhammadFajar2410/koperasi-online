@@ -1,11 +1,11 @@
 @extends('layouts.master')
-@section('page_title', 'Simpanan Pokok')
+@section('page_title', 'Simpanan Sukarela')
 @section('content')
 
     <div class="card">
         @include('layouts.notification')
         <div class="card-header header-elements-inline">
-            <h6 class="card-title">Simpanan Pokok</h6>
+            <h6 class="card-title">Simpanan Sukarela</h6>
             <div class="header-elements">
                 <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>
@@ -56,7 +56,7 @@
                                                 <div class="dropdown-menu dropdown-menu-left">
 
 
-                                                    <a href="{{ route('primary.show', $s->id) }}" class="dropdown-item"><i class="icon-eye"></i> Detail</a>
+                                                    <a href="{{ route('secondary.show', $s->id) }}" class="dropdown-item"><i class="icon-eye"></i> Detail</a>
 
 
                                                     {{-- <a id="{{ $u->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
@@ -81,7 +81,7 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <form method="POST" action="{{ route('primary.saving') }}">
+                                <form method="POST" action="{{ route('secondary.saving') }}">
                                     @csrf
                                     <div class="form-group row">
                                         <label class="col-lg-12 col-form-label font-weight-semibold">Nama Anggota <span class="text-danger">*</span></label>
@@ -119,7 +119,7 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <form method="POST" action="{{ route('primary.withdraw') }}">
+                                <form method="POST" action="{{ route('secondary.withdraw') }}">
                                     @csrf
                                     <div class="form-group row">
                                         <label class="col-lg-12 col-form-label font-weight-semibold">Nama Anggota <span class="text-danger">*</span></label>

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('loan_amount');
             $table->string('loan_interest');
             $table->string('total_amount');
+            $table->string('remaining_loan');
             $table->string('period');
-            $table->enum('type',['d','c']);
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->timestamps();

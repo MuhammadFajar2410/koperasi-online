@@ -23,8 +23,30 @@ class SecondarySaving extends Model
         return $this->belongsTo(User::class,'user_id');
     }
 
+    public function secondary_detail()
+    {
+        return $this->hasMany(SecondarySavingDetail::class,'secondary_id');
+    }
+
     public static function getSecondarySavings()
     {
         return SecondarySaving::with('user:id', 'user.profile:user_id,name,member_id')->get();
+    }
+
+    public static function getSingleSecondarySaving($id)
+    {
+        return SecondarySaving::with('user:id', 'user.profile:user_id,name,member_id')
+            ->where('id', $id)
+            ->first();
+    }
+
+    public static function getSingleMemberSecondarySaving($id)
+    {
+        return SecondarySaving::with('user:id', 'user.profile:user_id,name,member_id')
+            ->whereHas('user', function ($query) use ($id){
+                $query->where('id', $id);
+            })
+            ->first();
+
     }
 }

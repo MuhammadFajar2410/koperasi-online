@@ -28,8 +28,9 @@ class PrimarySavingController extends Controller
     {
         $savings = PrimarySaving::getPrimarySavings();
         $profiles = User::getActiveUser();
+        $allProfiles = User::getUsers();
 
-        return view('pages.pengurus.primary_savings.index', compact('savings', 'profiles'));
+        return view('pages.pengurus.primary_savings.index', compact('savings', 'profiles', 'allProfiles'));
     }
 
     public function saving(Request $request)
@@ -98,15 +99,15 @@ class PrimarySavingController extends Controller
             $saldo = PrimarySaving::where('user_id', $data['user_id'])->first();
             $date = Carbon::now()->toDateString();
             $saving_id = null;
-            $amount = 0; // Deklarasi awal variabel $amount
+            $amount = 0;
 
             if ($saldo) {
-                $saving_id = $saldo->id; // Pindahkan ini ke dalam blok if agar hanya dijalankan jika $saldo ditemukan
+                $saving_id = $saldo->id;
                 if ($saldo->amount >= $data['amount']) {
                     $amount = $saldo->amount - $data['amount'];
                 } else {
                     Session::flash('error', 'Saldo tidak mencukupi, jika ada kesalahan silahkan lakukan adjustment terlebih dahulu');
-                    return back(); // Kembalikan jika saldo tidak mencukupi
+                    return back();
                 }
             }
 
@@ -160,7 +161,7 @@ class PrimarySavingController extends Controller
         $savings = PrimarySavingDetail::getSinglePrimarySavingDetail($id);
         $profile = PrimarySaving::getSinglePrimarySaving($id);
         // dd($profile);
-        return view('pages.member.primary_savings.show', compact('savings', 'profile'));
+        return view('pages.pengurus.primary_savings.show', compact('savings', 'profile'));
     }
 
     /**

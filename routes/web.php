@@ -3,6 +3,7 @@
 use App\Http\Controllers\AssesmentController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LoanController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PrimarySavingController;
 use App\Http\Controllers\ProfileController;
@@ -45,6 +46,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('simpanan-pokok',[PrimarySavingController::class,'index'])->name('primary.member.index');
 
+    Route::get('simpanan-sukarela',[SecondarySavingController::class,'index'])->name('secondary.member.index');
 
 });
 
@@ -70,5 +72,12 @@ Route::middleware(['auth', 'multirole:admin,ketua,pengurus'])->group(function ()
     Route::post('pengurus/simpanan-pokok/withdraw',[PrimarySavingController::class,'withdraw'])->name('primary.withdraw');
     Route::get('pengurus/simpanan-pokok/{id}', [PrimarySavingController::class, 'show'])->name('primary.show');
 
-    Route::get('pengurus/simpanan-sukarela',[SecondarySavingController::class,'index'])->name('secondary.index');
+    Route::get('pengurus/simpanan-sukarela',[SecondarySavingController::class,'pIndexSaving'])->name('secondary.index');
+    Route::post('pengurus/simpanan-sukarela/saving',[SecondarySavingController::class,'saving'])->name('secondary.saving');
+    Route::post('pengurus/simpanan-sukarela/withdraw',[SecondarySavingController::class,'withdraw'])->name('secondary.withdraw');
+    Route::get('pengurus/simpanan-sukarela/{id}',[SecondarySavingController::class,'show'])->name('secondary.show');
+
+    Route::get('pengurus/pinjaman',[LoanController::class,'pLoanIndex'])->name('loan.index');
+    Route::post('pengurus/pinjaman/loan',[LoanController::class,'loan'])->name('loan.add');
+    Route::post('pengurus/pinjaman/installment',[LoanController::class,'installment'])->name('loan.installment');
 });

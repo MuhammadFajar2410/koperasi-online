@@ -131,9 +131,7 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $user = User::getSingleUser($id);
-        $roles = ['guru' => 'Guru', 'wali_murid' => 'Wali Murid', 'admin' => 'Admin', 'kepala_sekolah' => 'Kepala Sekolah'];
-        return view('pages.admin.users.edit', compact('user', 'roles'));
+
     }
 
     /**
