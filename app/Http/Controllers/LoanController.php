@@ -18,10 +18,25 @@ class LoanController extends Controller
      */
     public function index()
     {
-        $loans = LoanDetail::getMemberLoanDetail(Auth::id());
+        $loans = Loan::getMemberLoan(Auth::id());
         // dd($loans);
         // $profile = PrimarySaving::getSingleMemberPrimarySaving(Auth::id());
-        return view('pages.member.loans.index');
+        return view('pages.member.loans.index', compact('loans'));
+    }
+
+    public function memberShow($id)
+    {
+        $profile = Loan::getSingleLoan($id);
+        $loans = LoanDetail::getMemberLoanDetail(Auth::id(),$id);
+        dd($loans);
+        if(!$profile){
+            abort(404);
+        }
+        if(!$loans){
+            abort(403);
+        }
+
+        return view('pages.member.loans.show', compact('profile', 'loans'));
     }
 
     public function pLoanIndex()

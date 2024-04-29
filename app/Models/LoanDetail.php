@@ -32,12 +32,13 @@ class LoanDetail extends Model
             ->get();
     }
 
-    public static function getMemberLoanDetail($id)
+    public static function getMemberLoanDetail($user_id, $id)
     {
         return LoanDetail::with('loan.user')
-            ->whereHas('loan.user', function ($query) use ($id){
-                $query->where('id', $id);
+            ->whereHas('loan.user', function ($query) use ($user_id){
+                $query->where('id', $user_id);
             })
+            ->where('id', $id)
             ->get();
     }
 }

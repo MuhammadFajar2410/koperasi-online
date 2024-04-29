@@ -52,4 +52,19 @@ class Loan extends Model
             ->first();
     }
 
+    public static function getMemberLoanDetail($user_id, $id)
+    {
+        return Loan::with('loan_detail', 'user.profile')
+            ->where('user_id', $user_id)
+            ->where('id', $id)
+            ->get();
+    }
+
+    public static function getMemberLoan($id)
+    {
+        return Loan::with('loan_detail', 'user.profile')
+            ->where('user_id', $id)
+            ->get();
+    }
+
 }
