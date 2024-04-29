@@ -18,7 +18,10 @@ class LoanController extends Controller
      */
     public function index()
     {
-
+        $loans = LoanDetail::getMemberLoanDetail(Auth::id());
+        // dd($loans);
+        // $profile = PrimarySaving::getSingleMemberPrimarySaving(Auth::id());
+        return view('pages.member.loans.index');
     }
 
     public function pLoanIndex()
@@ -27,7 +30,8 @@ class LoanController extends Controller
         // dd($loans);
         $profiles = User::getActiveUser();
         $allProfiles = User::getUsers();
-        return view('pages.pengurus.loans.index', compact('loans', 'profiles', 'allProfiles'));
+        $loanInstallment = Loan::loanInstallment();
+        return view('pages.pengurus.loans.index', compact('loans', 'profiles', 'allProfiles', 'loanInstallment'));
     }
 
     public function loan(Request $request)
@@ -60,7 +64,7 @@ class LoanController extends Controller
 
             LoanDetail::create([
                 'loan_id' => $loan->id,
-                'amount' => $data['amount'],
+                'amount' => $total_amount,
                 'date' => $date,
                 'type' => 'c',
                 'description' => $data['description'],
@@ -80,14 +84,13 @@ class LoanController extends Controller
         }
     }
 
-    public function installment(Request $request, $id)
+    public function installment(Request $request)
     {
         $this->validate($request, [
-            'user_id' => 'required|exists:loans,user_id',
+            'loan_id' => 'required|exists:loans,id',
             'amount' => 'required|min:0|numeric',
-            'period' => 'required'
         ],[
-            'user_id.exists' => 'Belum ada pinjaman dari anggota ini. Silahkan cek history anggota.'
+            'loan_id.exists' => 'Belum ada pinjaman dari anggota ini. Silahkan hubungi admin untuk pengecekan.'
         ]);
 
         DB::beginTransaction();
@@ -95,40 +98,43 @@ class LoanController extends Controller
         try {
 
             $data = $request->all();
-            $loan = Loan::where('user_id', $data['user_id'])->where('id', $id)->first();
+            $loan = Loan::where('id', $data['loan_id'])->first();
             $created_by = User::getUserLogin(Auth::id())->profile->name;
             $date = Carbon::now()->toDateString();
-            $data['period'] = strtoupper($data['period']);
 
             // dd($data);
 
-            $loan = Loan::create([
-                'user_id' => $data['user_id'],
-                'loan_type' => 'uang',
-                'loan_amount' => $data['amount'],
-                'loan_interest' => $data['interest'],
-                'total_amount' => $total_amount,
-                'remaining_loan' => $total_amount,
-                'period' => $data['period'],
-                'created_by' => $created_by,
+            if($loan){
+                $loan_id = $loan->id;
+                if($loan->remaining_loan >= $data['amount']){
+                    $remaining_loan = $loan->remaining_loan - $data['amount'];
+                } else {
+                    Session::flash('error','Pinjaman anggota tidak bisa kurang dari 0');
+                    return back();
+                }
+            }
+
+            $loan->update([
+                'remaining_loan' => $remaining_loan
             ]);
 
             LoanDetail::create([
-                'loan_id' => $loan->id,
+                'loan_id' => $loan_id,
                 'amount' => $data['amount'],
                 'date' => $date,
-                'type' => 'c',
+                'type' => 'd',
                 'description' => $data['description'],
                 'created_by' => $created_by
             ]);
 
             DB::commit();
 
-            Session::flash('success', 'Berhasil menambahkan tabungan anggota');
+            Session::flash('success', 'Berhasil membayarkan pinjaman anggota silahkan cek riwayat');
             return redirect()->route('loan.index');
         } catch (\Exception $e) {
             DB::rollback();
 
+            // Session::flash('error', 'Terjadi kesalahan saat melakukan save, silahkan hubungi admin');
             Session::flash('error', $e->getMessage());
             return back();
         }
@@ -153,9 +159,16 @@ class LoanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Loan $loan)
+    public function show($id)
     {
-        //
+        $loans = LoanDetail::getSingleLoanDetail($id);
+        $profile = Loan::getSingleLoan($id);
+
+        if(!$profile){
+            abort(404);
+        }
+
+        return view('pages.pengurus.loans.show', compact('loans', 'profile'));
     }
 
     /**

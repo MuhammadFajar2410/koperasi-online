@@ -34,6 +34,7 @@
                                     <th>Total</th>
                                     <th>Periode</th>
                                     <th>Sisa</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -49,6 +50,7 @@
                                     <td>{{ 'Rp. ' . number_format($l->total_amount, 0, ',', '.') }}</td>
                                     <td>{{ $l->period }}</td>
                                     <td>{{ 'Rp. ' . number_format($l->remaining_loan, 0, ',', '.') }}</td>
+                                    <td class="{{ $l->remaining_loan <= 0 ? 'bg-success' : 'bg-danger' }}">{{ $l->remaining_loan <= 0 ? 'Lunas' : 'Belum Lunas' }}</td>
                                     <td class="text-center">
                                         <div class="list-icons">
                                             <div class="dropdown">
@@ -59,7 +61,7 @@
                                                 <div class="dropdown-menu dropdown-menu-left">
 
 
-                                                    <a href="{{ route('primary.show', $l->id) }}" class="dropdown-item"><i class="icon-eye"></i> Detail</a>
+                                                    <a href="{{ route('loan.show', $l->id) }}" class="dropdown-item"><i class="icon-eye"></i> Detail</a>
 
 
                                                     {{-- <a id="{{ $u->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
@@ -135,28 +137,18 @@
                                 <form method="POST" action="{{ route('loan.installment') }}">
                                     @csrf
                                     <div class="form-group row">
-                                        <label class="col-lg-12 col-form-label font-weight-semibold">Nama Anggota <span class="text-danger">*</span></label>
-                                        <select class="select-search form-control" id="user_id" name="user_id" data-fouc data-placeholder="Choose..">
+                                        <label class="col-lg-12 col-form-label font-weight-semibold">Pinjaman Anggota <span class="text-danger">*</span></label>
+                                        <select class="select-search form-control" id="loan_id" name="loan_id" data-fouc data-placeholder="Choose..">
                                             <option value=""></option>
-                                            @foreach ($allProfiles as $p )
-                                                <option value="{{ $p->id }}">{{ $p->profile->name }}</option>
+                                            @foreach ($loanInstallment as $l )
+                                                <option value="{{ $l->id }}">{{ $l->user->profile->member_id . ' - ' . $l->user->profile->name . ' - ' . 'Rp. ' . number_format($l->remaining_loan, 0, ',', '.')   }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-lg-12 col-form-label font-weight-semibold">Nominal Pinjaman <span class="text-danger">*</span></label>
+                                        <label class="col-lg-12 col-form-label font-weight-semibold">Nominal Pembayaran <span class="text-danger">*</span></label>
                                         <input type="number" name="amount" class="form-control" min="1" required>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-lg-12 col-form-label font-weight-semibold">Jasa Pinjaman dalam persentase <span class="text-danger">*</span></label>
-                                        <input type="number" name="loan_interest" class="form-control" min="0" max="100" required>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-lg-12 col-form-label font-weight-semibold">Tanggal Pinjaman <span class="text-danger">*</span></label>
-                                        <input type="date" name="date" class="form-control" required>
                                     </div>
 
                                     <div class="form-group row">

@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('page_title', 'Simpanan Pokok ')
+@section('page_title', 'Transaksi Pinjaman')
 @section('content')
 
     <div class="card">
@@ -16,10 +16,19 @@
 
         <div class="card-body">
             <h5>Nama : <span class="font-weight-bold">{{ $profile->user->profile->name }}</span></h5>
-            <h5>Saldo :
-                <span class="font-weight-bold">
+            <h5>Total Pinjaman :
+                <span class="font-weight-bold {{ $profile->remaining_loan <= 0 ? 'bg-success' : '' }}">
                     @if($profile)
-                        {{ 'Rp. ' . number_format($profile->amount, 0, ',', '.') }}
+                        {{ 'Rp. ' . number_format($profile->total_amount, 0, ',', '.') }}
+                    @else
+                        -
+                    @endif
+                </span>
+            </h5>
+            <h5>Sisa Pinjaman :
+                <span class="font-weight-bold {{ $profile->remaining_loan <= 0 ? 'bg-success' : '' }}">
+                    @if($profile)
+                        {{ 'Rp. ' . number_format($profile->remaining_loan, 0, ',', '.') }}
                     @else
                         -
                     @endif
@@ -44,16 +53,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                        @if ($savings)
+                        @if ($loans)
 
-                            @foreach($savings as $s)
+                            @foreach($loans as $l)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ 'Rp. ' . number_format($s->amount, 0, ',', '.') }}</td>
-                                    <td class="{{ $s->type == 'd' ? 'text-primary' : 'text-danger' }}">{{ $s->type == 'd' ? 'Debit' : 'Kredit' }}</td>
-                                    <td>{{ $s->date }}</td>
-                                    <td>{{ $s->description ?? '' }}</td>
-                                    <td>{{ $s->created_by }}</td>
+                                    <td>{{ 'Rp. ' . number_format($l->amount, 0, ',', '.') }}</td>
+                                    <td class="{{ $l->type == 'd' ? 'text-primary' : 'text-danger' }}">{{ $l->type == 'd' ? 'Debit' : 'Kredit' }}</td>
+                                    <td>{{ $l->date }}</td>
+                                    <td>{{ $l->description ?? '' }}</td>
+                                    <td>{{ $l->created_by }}</td>
                                 </tr>
                             @endforeach
                         @endif

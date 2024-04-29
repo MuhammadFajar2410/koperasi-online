@@ -27,9 +27,29 @@ class Loan extends Model
         return $this->belongsTo(User::class,'user_id');
     }
 
+    public function loan_detail()
+    {
+        return $this->hasMany(LoanDetail::class,'loan_id');
+    }
+
     //Transaksi DB
     public static function getLoans()
     {
         return Loan::with('user.profile')->get();
     }
+
+    public static function loanInstallment()
+    {
+        return Loan::with('user.profile')
+            ->where('remaining_loan', '>', 0)
+            ->get();
+    }
+
+    public static function getSingleLoan($id)
+    {
+        return Loan::with('user.profile')
+            ->where('id', $id)
+            ->first();
+    }
+
 }

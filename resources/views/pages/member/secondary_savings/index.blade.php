@@ -50,7 +50,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ 'Rp. ' . number_format($s->amount, 0, ',', '.') }}</td>
-                                    <td>{{ $s->type == 'd' ? 'Debit' : 'Kredit' }}</td>
+                                    <td class="{{ $s->type == 'd' ? 'text-primary' : 'text-danger' }}">{{ $s->type == 'd' ? 'Debit' : 'Kredit' }}</td>
                                     <td>{{ $s->date }}</td>
                                     <td>{{ $s->description ?? '' }}</td>
                                     <td>{{ $s->created_by }}</td>

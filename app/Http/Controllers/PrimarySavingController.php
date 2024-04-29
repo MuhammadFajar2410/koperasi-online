@@ -161,6 +161,11 @@ class PrimarySavingController extends Controller
         $savings = PrimarySavingDetail::getSinglePrimarySavingDetail($id);
         $profile = PrimarySaving::getSinglePrimarySaving($id);
         // dd($profile);
+
+        if(!$profile){
+            abort(404);
+        }
+
         return view('pages.pengurus.primary_savings.show', compact('savings', 'profile'));
     }
 

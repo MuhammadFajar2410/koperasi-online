@@ -171,6 +171,12 @@ class SecondarySavingController extends Controller
         $savings = SecondarySavingDetail::getSingleSecondarySavingDetail($id);
         $profile = SecondarySaving::getSingleSecondarySaving($id);
         // dd($profile);
+
+        if(!$profile){
+            abort(404);
+        }
+
+
         return view('pages.pengurus.primary_savings.show', compact('savings', 'profile'));
     }
 
