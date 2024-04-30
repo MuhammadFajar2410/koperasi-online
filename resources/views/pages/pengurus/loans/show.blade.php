@@ -40,6 +40,30 @@
 
             <div class="tab-content">
                     <div class="tab-pane fade show active" id="all-classes">
+                        <form action="{{ route('loan.update', $profile->id) }}" method="POST">
+                            @method('PATCH')
+                            @csrf
+                            <div class="form-group row">
+                                <label class="col-form-label font-weight-semibold" for="type">Transaksi<span class="text-danger">*</span></label>
+                                <div class="col-lg-3">
+                                    <select class="select-search form-control" id="type" name="type" data-fouc data-placeholder="Choose.." required>
+                                        <option value=""></option>
+                                        <option value="d">Debit</option>
+                                        <option value="c">Kredit</option>
+
+                                    </select>
+                                </div>
+                                <label class="col-form-label font-weight-semibold">Nominal<span class="text-danger">*</span></label>
+                                <div class="col-lg-3">
+                                    <input type="number" name="amount" class="form-control" placeholder="Nominal" min="1" required>
+                                </div>
+                                <label class="col-form-label font-weight-semibold">Keterangan<span class="text-danger">*</span></label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control" name="description" placeholder="Keterangan Koreksi Wajib Diisi" required>
+                                </div>
+                                <button class="btn btn-primary col-1">Save</button>
+                            </div>
+                        </form>
                         <table class="table datatable-button-html5-columns">
                             <thead>
                             <tr>
@@ -63,7 +87,13 @@
                                     <td>{{ 'Rp. ' . number_format($l->latest_amount, 0, ',', '.') }}</td>
                                     <td>{{ $l->date }}</td>
                                     <td>{{ $l->description ?? '' }}</td>
-                                    <td>{{ $l->created_by }}</td>
+                                    <td>
+                                        @foreach ($profiles as $profile)
+                                            @if ($profile->id == $l->created_by)
+                                                {{ $profile->profile->name ?? '-'}}
+                                            @endif
+                                        @endforeach
+                                    </td>
                                 </tr>
                             @endforeach
                         @endif

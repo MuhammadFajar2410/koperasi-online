@@ -28,6 +28,7 @@ class LoanController extends Controller
     {
         $profile = Loan::getSingleLoan($id);
         $loans = LoanDetail::getmemberLoanDetails(Auth::id(), $id);
+        $profiles = User::getAllUserProfile();
         // dd($loans);
 
         if(!$profile){
@@ -37,7 +38,7 @@ class LoanController extends Controller
             abort(403);
         }
 
-        return view('pages.member.loans.show', compact('profile', 'loans'));
+        return view('pages.member.loans.show', compact('profile', 'loans', 'profiles'));
     }
 
     public function pLoanIndex()
@@ -61,7 +62,7 @@ class LoanController extends Controller
 
         try {
             $data = $request->all();
-            $created_by = User::getUserLogin(Auth::id())->profile->name;
+            $created_by = Auth::id();
             $date = Carbon::now()->toDateString();
             $data['period'] = strtoupper($data['period']);
             $total_amount = $data['amount'] + ($data['amount'] * $data['interest'] / 100);
@@ -116,7 +117,7 @@ class LoanController extends Controller
 
             $data = $request->all();
             $loan = Loan::where('id', $data['loan_id'])->first();
-            $created_by = User::getUserLogin(Auth::id())->profile->name;
+            $created_by = Auth::id();
             $date = Carbon::now()->toDateString();
 
             // dd($data);
@@ -181,12 +182,13 @@ class LoanController extends Controller
     {
         $loans = LoanDetail::getSingleLoanDetail($id);
         $profile = Loan::getSingleLoan($id);
+        $profiles = User::getAllUserProfile();
 
         if(!$profile){
             abort(404);
         }
 
-        return view('pages.pengurus.loans.show', compact('loans', 'profile'));
+        return view('pages.pengurus.loans.show', compact('loans', 'profile', 'profiles'));
     }
 
     /**
@@ -200,9 +202,61 @@ class LoanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Loan $loan)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'amount' => 'required|numeric',
+            'type' => 'required',
+            'description' => 'required|min:3'
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+
+            $data = $request->all();
+            $data['description'] = ucwords($data['description']);
+            $loan = Loan::where('id', $id)->first();
+            $created_by = Auth::id();
+            $date = Carbon::now()->toDateString();
+
+            // dd($data);
+
+            if($loan){
+                $loan_id = $loan->id;
+                if($loan->remaining_loan >= $data['amount']){
+                    $remaining_loan = $loan->remaining_loan - $data['amount'];
+                } else {
+                    Session::flash('error','Pinjaman anggota tidak bisa kurang dari 0');
+                    return back();
+                }
+            }
+
+            $loan->update([
+                'remaining_loan' => $remaining_loan
+            ]);
+
+            LoanDetail::create([
+                'loan_id' => $loan_id,
+                'amount' => $data['amount'],
+                'date' => $date,
+                'type' => $data['type'],
+                'description' => $data['description'],
+                'latest_amount' => $remaining_loan,
+                'created_by' => $created_by
+            ]);
+
+            DB::commit();
+
+            Session::flash('success', 'Berhasil Melakukan Input Transaksi silahkan cek riwayat transaksi');
+            return back();
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Session::flash('error', $e->getMessage());
+            // Session::flash('error', 'Terjadi Kesalahan saat melakukan save data');
+            return back();
+        }
     }
 
     /**

@@ -111,6 +111,7 @@ class User extends Authenticatable
     {
         return User::with('profile:user_id,name')
             ->where('status', true)
+            ->where('username', '!=', 'admin')
             ->get();
     }
 

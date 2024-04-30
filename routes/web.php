@@ -53,6 +53,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('pinjaman',[LoanController::class,'index'])->name('loan.member.index');
     Route::get('pinjaman/{id}',[LoanController::class,'memberShow'])->name('loan.member.show');
+
+
+
 });
 
 
@@ -93,6 +96,8 @@ Route::middleware(['auth', 'multirole:admin,ketua,pengurus'])->group(function ()
     Route::post('pengurus/pinjaman/loan',[LoanController::class,'loan'])->name('loan.add');
     Route::post('pengurus/pinjaman/installment',[LoanController::class,'installment'])->name('loan.installment');
     Route::get('pengurus/pinjaman/{id}',[LoanController::class,'show'])->name('loan.show');
+    Route::patch('pengurus/pinjaman/{id}',[LoanController::class,'update'])->name('loan.update');
+
 
     Route::get('transaksi-lainnya',[OtherTransactionController::class,'index'])->name('other.transaction.index');
 });

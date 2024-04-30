@@ -58,4 +58,6 @@ class LoanDetail extends Model
             ->whereBetween('date', [$startDate, $endDate])
             ->sum('amount');
     }
+
+
 }

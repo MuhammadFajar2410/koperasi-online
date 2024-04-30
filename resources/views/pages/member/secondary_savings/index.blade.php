@@ -53,7 +53,13 @@
                                     <td class="text-danger">{{ $s->type == 'c' ? 'Rp. ' . number_format($s->amount, 0, ',', '.') : '' }}</td>
                                     <td>{{ $s->date }}</td>
                                     <td>{{ $s->description ?? '' }}</td>
-                                    <td>{{ $s->created_by }}</td>
+                                    <td>
+                                        @foreach ($profiles as $profile)
+                                            @if ($profile->id == $s->created_by)
+                                                {{ $profile->profile->name ?? '-'}}
+                                            @endif
+                                        @endforeach
+                                    </td>
                                 </tr>
                             @endforeach
                         @endif

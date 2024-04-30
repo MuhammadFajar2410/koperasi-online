@@ -21,8 +21,9 @@ class SecondarySavingController extends Controller
     {
         $savings = SecondarySavingDetail::getMemberSavingDetail(Auth::id());
         $profile = SecondarySaving::getSingleMemberSecondarySaving(Auth::id());
+        $profiles = User::getAllUserProfile();
 
-        return view('pages.member.secondary_savings.index', compact('savings', 'profile'));
+        return view('pages.member.secondary_savings.index', compact('savings', 'profile', 'profiles'));
     }
 
     public function pIndexSaving()
@@ -45,7 +46,7 @@ class SecondarySavingController extends Controller
 
         try {
             $data = $request->all();
-            $created_by = User::getUserLogin(Auth::id())->profile->name;
+            $created_by = Auth::id();
             $saldo = SecondarySaving::where('user_id', $data['user_id'])->first();
             $date = Carbon::now()->toDateString();
 
@@ -106,7 +107,7 @@ class SecondarySavingController extends Controller
 
         try {
             $data = $request->all();
-            $created_by = User::getUserLogin(Auth::id())->profile->name;
+            $created_by = Auth::id();
             $saldo = SecondarySaving::where('user_id', $data['user_id'])->first();
             $date = Carbon::now()->toDateString();
             $saving_id = null;
@@ -172,6 +173,7 @@ class SecondarySavingController extends Controller
     {
         $savings = SecondarySavingDetail::getSingleSecondarySavingDetail($id);
         $profile = SecondarySaving::getSingleSecondarySaving($id);
+        $profiles = User::getAllUserProfile();
         // dd($profile);
 
         if(!$profile){
@@ -179,7 +181,7 @@ class SecondarySavingController extends Controller
         }
 
 
-        return view('pages.pengurus.secondary_savings.show', compact('savings', 'profile'));
+        return view('pages.pengurus.secondary_savings.show', compact('savings', 'profile', 'profiles'));
     }
 
     /**

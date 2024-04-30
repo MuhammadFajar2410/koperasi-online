@@ -55,7 +55,13 @@
                                     <td>{{ 'Rp. ' . number_format($s->latest_amount, 0, ',', '.') }}</td>
                                     <td>{{ $s->date }}</td>
                                     <td>{{ $s->description ?? '' }}</td>
-                                    <td>{{ $s->created_by }}</td>
+                                    <td>
+                                        @foreach ($profiles as $profile)
+                                            @if ($profile->id == $s->created_by)
+                                                {{ $profile->profile->name ?? '-'}}
+                                            @endif
+                                        @endforeach
+                                    </td>
                                 </tr>
                             @endforeach
                         @endif
