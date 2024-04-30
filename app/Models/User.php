@@ -83,7 +83,7 @@ class User extends Authenticatable
 
     public static function getUserLogin($user_id)
     {
-        return User::with('profile:user_id,name')
+        return User::with('profile:user_id,name', 'role')
             ->where('id', $user_id)
             ->first();
     }
@@ -100,6 +100,11 @@ class User extends Authenticatable
     public static function getUsers()
     {
         return User::with('role:id,name', 'profile:user_id,name,member_id')->get();
+    }
+
+    public static function getSingleUser($id)
+    {
+        return User::with('profile')->where('id', $id)->first();
     }
 
     public static function getAllUserProfile()

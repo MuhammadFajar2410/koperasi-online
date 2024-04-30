@@ -36,8 +36,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('login', [LoginController::class, 'login_form'])->middleware('guest')->name('login-page');
 Route::post('login', [LoginController::class, 'login'])->middleware('guest')->name('login');
 
-Route::get('register', [LoginController::class, 'register_form'])->middleware('guest')->name('register-page');
-Route::post('register', [LoginController::class, 'register'])->middleware('guest')->name('register');
+// Route::get('register', [LoginController::class, 'register_form'])->middleware('guest')->name('register-page');
+// Route::post('register', [LoginController::class, 'register'])->middleware('guest')->name('register');
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
@@ -54,8 +54,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('pinjaman',[LoanController::class,'index'])->name('loan.member.index');
     Route::get('pinjaman/{id}',[LoanController::class,'memberShow'])->name('loan.member.show');
 
-
-
+    Route::get('profile', [UserController::class,'myProfile'])->name('my.profile');
+    Route::patch('profile/{id}', [UserController::class,'changePasswordMember'])->name('change.password');
 });
 
 
@@ -66,7 +66,6 @@ Route::middleware(['auth', 'multirole:admin,ketua'])->group(function () {
     Route::patch('jabatan/{id}',[RoleController::class,'update'])->name('role.update');
     Route::delete('jabatan/{id}',[RoleController::class,'destroy'])->name('role.destroy');
 
-    Route::get('users',[UserController::class,'index'])->name('user.index');
 
     Route::get('karegori-transaksi',[TransactionCategoryController::class,'index'])->name('other.cat.index');
     Route::post('karegori-transaksi',[TransactionCategoryController::class,'store'])->name('other.cat.add');
@@ -74,9 +73,14 @@ Route::middleware(['auth', 'multirole:admin,ketua'])->group(function () {
     Route::patch('karegori-transaksi/{id}',[TransactionCategoryController::class,'update'])->name('other.cat.update');
 
     Route::post('transaksi-lainnya',[OtherTransactionController::class,'store'])->name('other.transaction.add');
+
+    Route::get('users/edit/{id}',[UserController::class,'edit'])->name('user.edit');
+    Route::patch('users/change-password/{id}',[UserController::class,'changePasswordAdmin'])->name('user.update');
+    Route::patch('users/change-profile/{id}',[UserController::class,'changeProfileAdmin'])->name('profile.update');
 });
 
 Route::middleware(['auth', 'multirole:admin,ketua,pengurus'])->group(function () {
+    Route::get('users',[UserController::class,'index'])->name('user.index');
     Route::get('users/add',[UserController::class,'addUser'])->name('add.user.view');
     Route::post('users/add',[UserController::class,'adminAddUser'])->name('add.user');
 

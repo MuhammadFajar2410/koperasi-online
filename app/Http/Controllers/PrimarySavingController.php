@@ -30,8 +30,9 @@ class PrimarySavingController extends Controller
         $savings = PrimarySaving::getPrimarySavings();
         $profiles = User::getActiveUser();
         $allProfiles = PrimarySaving::getPrimaryWithdrawSavings();
+        $created_by = User::getAllUserProfile();
 
-        return view('pages.pengurus.primary_savings.index', compact('savings', 'profiles', 'allProfiles'));
+        return view('pages.pengurus.primary_savings.index', compact('savings', 'profiles', 'allProfiles', 'created_by'));
     }
 
     public function saving(Request $request)

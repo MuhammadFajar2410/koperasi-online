@@ -30,9 +30,10 @@ class SecondarySavingController extends Controller
     {
         $savings = SecondarySaving::getSecondarySavings();
         $profiles = User::getActiveUser();
+        $created_by = User::getAllUserProfile();
         $allProfiles = SecondarySaving::getSecondaryWithdrawSavings();
 
-        return view('pages.pengurus.secondary_savings.index', compact('savings', 'profiles', 'allProfiles'));
+        return view('pages.pengurus.secondary_savings.index', compact('savings', 'profiles', 'allProfiles', 'created_by'));
     }
 
     public function saving(Request $request)

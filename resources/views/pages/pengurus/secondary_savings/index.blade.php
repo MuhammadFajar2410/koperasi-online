@@ -45,7 +45,13 @@
                                     <td>{{ $s->user->profile->name ?? ''}}</td>
                                     <td>{{ 'Rp. ' . number_format($s->amount, 0, ',', '.') }}</td>
                                     <td>{{ $s->date }}</td>
-                                    <td>{{ $s->created_by }}</td>
+                                    <td>
+                                        @foreach ($created_by as $c)
+                                            @if ($c->id == $s->created_by)
+                                                {{ $c->profile->name ?? '-'}}
+                                            @endif
+                                        @endforeach
+                                    </td>
                                     <td class="text-center">
                                         <div class="list-icons">
                                             <div class="dropdown">

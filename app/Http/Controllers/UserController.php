@@ -50,7 +50,7 @@ class UserController extends Controller
 
         try {
             $data = $request->all();
-            $data['created_by'] = User::getUserLogin(Auth::id())->profile->name;
+            $data['created_by'] = Auth::id();
 
             // dd($data);
             $user = User::create([
@@ -132,38 +132,124 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
+        $user = User::getSingleUser($id);
+        $roles = Role::getActiveRole();
+        return view('pages.admin.users.edit', compact('user', 'roles'));
+    }
 
+    public function myProfile()
+    {
+        $user = User::getSingleUser(Auth::id());
+
+        return view('pages.member.profiles.my_account', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function changePasswordAdmin(Request $request, $id)
     {
         $this->validate($request, [
-            'username' => 'required|min:3',
-            'role' => 'required',
-            'status' => 'required'
+            'password' => 'required|min:6|confirmed'
         ]);
 
         $user = User::getSingleUser($id);
+
 
         try {
 
             $data = $request->all();
 
             $user->update([
-                'username' => $data['username'],
-                'role' => $data['role'],
+                'password' => Hash::make($data['password']),
+                'updated_by' => Auth::id()
+            ]);
+
+
+
+            Session::flash('success', 'Berhasil merubah ');
+            return redirect()->route('user.index');
+        } catch (\Exception $e) {
+            // Session::flash('error',$e->getMessage());
+            Session::flash('error', 'Kesalahan ketika mengirim data');
+            return back();
+        }
+    }
+
+    public function changePasswordMember(Request $request, $id)
+    {
+        $this->validate($request, [
+            'password' => 'required|confirmed'
+        ]);
+
+        $user = User::getSingleUser($id);
+
+        try {
+            $data = $request->all();
+
+            $my_pass = Auth::user()->password;
+            $old_pass = $data['current_password'];
+            $new_pass = $data['password'];
+
+            if(password_verify($old_pass, $my_pass)){
+                $data['password'] = Hash::make($new_pass);
+            } else {
+                Session::flash('error', 'Password salah, silahkan hubungi admin jika lupa password');
+            }
+
+            $user->update([
+                'password' => $data['password']
+            ]);
+
+            Session::flash('success', 'Berhasil mengganti password');
+            return redirect()->route('home');
+
+        } catch (\Exception $e){
+            // Session::flash('error',$e->getMessage());
+            Session::flash('error', 'Kesalahan ketika mengirim data');
+            return back();
+        }
+    }
+
+    public function changeProfileAdmin(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required|min:3',
+            'role_id' => 'required|exists:roles,id',
+        ]);
+
+        $user = User::getSingleUser($id);
+        $profile = Profile::where('user_id', $id);
+
+            DB::beginTransaction();
+        try {
+            $data = $request->all();
+
+            $user->update([
+                'role_id' => $data['role_id'],
+                'exitOn' => $data['exitOn'],
+                'reason' => $data['reason'],
                 'status' => $data['status'],
             ]);
 
-            Session::flash('success', 'Berhasil edit user');
-            return redirect()->route('users.index');
+            $profile->update([
+                'member_id' => $data['member_id'],
+                'name' => $data['name'],
+                'address' => $data['address'],
+                'gender' => $data['gender'],
+                'job' => $data['job'],
+            ]);
+
+            DB::commit();
+
+            Session::flash('success', 'Berhasil merubah ');
+            return redirect()->route('user.index');
         } catch (\Exception $e) {
-            // Session::flash('error',$e);
-            Session::flash('error', 'Kesalahan ketika mengirim data');
-            return back();
+            DB::rollback();
+
+             Session::flash('error',$e->getMessage());
+            //  Session::flash('error', 'Kesalahan ketika mengirim data');
+             return back();
         }
     }
 

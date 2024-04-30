@@ -53,7 +53,7 @@
                                                 <div class="dropdown-menu dropdown-menu-left">
 
 
-                                                    {{-- <a href="{{ route('users.edit', $u->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a> --}}
+                                                    <a href="{{ route('user.edit', $u->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
 
 
                                                     {{-- <a id="{{ $u->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>

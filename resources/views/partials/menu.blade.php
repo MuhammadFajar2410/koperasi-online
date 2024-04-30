@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="ml-3 align-self-center">
-                        <a href="{{ url('my_account') }}" class="text-white"><i class="icon-cog3"></i></a>
+                        <a href="{{ route('my.profile') }}" class="text-white"><i class="icon-cog3"></i></a>
                     </div>
                 </div>
             </div>
