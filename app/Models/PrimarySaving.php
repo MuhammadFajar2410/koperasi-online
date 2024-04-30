@@ -41,8 +41,6 @@ class PrimarySaving extends Model
             ->get();
     }
 
-
-
     public static function getSinglePrimarySaving($id)
     {
         return PrimarySaving::with('user:id', 'user.profile:user_id,name,member_id')
@@ -58,5 +56,19 @@ class PrimarySaving extends Model
             })
             ->first();
 
+    }
+
+    public static function getSUMDebit($startDate, $endDate)
+    {
+        return PrimarySaving::where('type', 'd')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('amount');
+    }
+
+    public static function getSUMCredit($startDate, $endDate)
+    {
+        return PrimarySaving::where('type', 'c')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('amount');
     }
 }

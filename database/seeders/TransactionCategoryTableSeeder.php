@@ -14,15 +14,15 @@ class TransactionCategoryTableSeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['name' => 'Saldo Awal', 'created_by' => 'system'],
-            ['name' => 'Saldo Akhir', 'created_by' => 'system'],
-            ['name' => 'Dana Pendidikan & Sosial', 'created_by' => 'system'],
-            ['name' => 'Dana Cadangan', 'created_by' => 'system'],
-            ['name' => 'Dana Administrasi', 'created_by' => 'system'],
-            ['name' => 'Dana Transport Pelatihan', 'created_by' => 'system'],
-            ['name' => 'Sisa RAT', 'created_by' => 'system'],
-            ['name' => 'Pengembalian Angsuran', 'created_by' => 'system'],
-            ['name' => 'Adjustment', 'created_by' => 'system'],
+            ['name' => 'Saldo Awal', 'created_by' => '2'],
+            ['name' => 'Saldo Akhir', 'created_by' => '2'],
+            ['name' => 'Dana Pendidikan & Sosial', 'created_by' => '2'],
+            ['name' => 'Dana Cadangan', 'created_by' => '2'],
+            ['name' => 'Dana Administrasi', 'created_by' => '2'],
+            ['name' => 'Dana Transport Pelatihan', 'created_by' => '2'],
+            ['name' => 'Sisa RAT', 'created_by' => '2'],
+            ['name' => 'Pengembalian Angsuran', 'created_by' => '2'],
+            ['name' => 'Adjustment', 'created_by' => '2'],
         ];
 
         foreach ($categories as $category) {

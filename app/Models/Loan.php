@@ -67,4 +67,6 @@ class Loan extends Model
             ->get();
     }
 
+
+
 }

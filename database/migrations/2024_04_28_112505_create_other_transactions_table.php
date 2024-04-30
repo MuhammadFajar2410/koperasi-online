@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::create('other_transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('t_cat_id')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('description');
+            $table->string('amount');
+            $table->enum('type', ['d', 'c']);
             $table->string('date');
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->timestamps();
 
             $table->foreign('t_cat_id')->references('id')->on('transaction_categories');
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

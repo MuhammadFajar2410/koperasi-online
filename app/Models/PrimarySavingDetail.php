@@ -50,4 +50,18 @@ class PrimarySavingDetail extends Model
             ->get();
     }
 
+    public static function getSUMDebit($startDate, $endDate)
+    {
+        return PrimarySavingDetail::where('type', 'd')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('amount');
+    }
+
+    public static function getSUMCredit($startDate, $endDate)
+    {
+        return PrimarySavingDetail::where('type', 'c')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('amount');
+    }
+
 }

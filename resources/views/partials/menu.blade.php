@@ -119,27 +119,18 @@
                         </ul>
                     </li>
                     @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua' || Auth::user()->role->name == 'pengurus'))
-                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['role.index', 'user.index', 'add.user.view', 'member.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
-                        <a href="#" class="nav-link"><i class="icon-windows2"></i><span>Manajemen Anggota</span></a>
+                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['other.cat.index', 'other.transaction.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
+                        <a href="#" class="nav-link"><i class="icon-windows2"></i><span>Transaksi Lainnya</span></a>
                         <ul class="nav nav-group-sub">
-                            @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua'))
                                 <li class="nav-item">
-                                    <a href="{{ route('role.index') }}" class="nav-link
-                                    {{ (Route::is('role.index')) ? 'active' : ''}}">Jabatan</a>
+                                    <a href="{{ route('other.cat.index') }}" class="nav-link
+                                    {{ (Route::is('other.cat.index')) ? 'active' : ''}}">Kategori Transaksi Lainnya</a>
                                 </li>
                                 <li class="nav-item">
-                                 <a href="{{ route('user.index') }}" class="nav-link
-                                    {{ (Route::is('user.index')) ? 'active' : ''}}">Users</a>
+                                    <a href="{{ route('other.transaction.index') }}" class="nav-link
+                                    {{ (Route::is('other.transaction.index')) ? 'active' : ''}}">Transaksi Lainnya</a>
                                 </li>
-                            @endif
-                                <li class="nav-item">
-                                    <a href="{{ route('add.user.view') }}" class="nav-link
-                                    {{ (Route::is('add.user.view')) ? 'active' : ''}}">Anggota Baru</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('member.index') }}" class="nav-link
-                                    {{ (Route::is('member.index')) ? 'active' : ''}}">Semua Anggota</a>
-                                </li>
+
                         </ul>
                     </li>
                 @endif

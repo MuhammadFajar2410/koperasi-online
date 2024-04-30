@@ -88,9 +88,23 @@ class User extends Authenticatable
             ->first();
     }
 
+    public static function getUserRole($name)
+    {
+        return User::with('role')
+            ->whereHas('role', function ($query) use ($name) {
+                $query->where('name', $name);
+            })
+            ->get();
+    }
+
     public static function getUsers()
     {
         return User::with('role:id,name', 'profile:user_id,name,member_id')->get();
+    }
+
+    public static function getAllUserProfile()
+    {
+        return User::with('profile')->get();
     }
 
     public static function getActiveUser()

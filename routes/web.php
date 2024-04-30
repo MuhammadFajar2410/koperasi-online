@@ -5,6 +5,7 @@ use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\OtherTransactionController;
 use App\Http\Controllers\PrimarySavingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -14,7 +15,9 @@ use App\Http\Controllers\StudentAssessmentController;
 use App\Http\Controllers\StudentClassroomController;
 use App\Http\Controllers\StudentProfileController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TransactionCategoryController;
 use App\Http\Controllers\UserController;
+use App\Models\OtherTransaction;
 use App\Models\PrimarySaving;
 use App\Models\StudentClassroom;
 use Illuminate\Support\Facades\Route;
@@ -61,6 +64,13 @@ Route::middleware(['auth', 'multirole:admin,ketua'])->group(function () {
     Route::delete('jabatan/{id}',[RoleController::class,'destroy'])->name('role.destroy');
 
     Route::get('users',[UserController::class,'index'])->name('user.index');
+
+    Route::get('karegori-transaksi',[TransactionCategoryController::class,'index'])->name('other.cat.index');
+    Route::post('karegori-transaksi',[TransactionCategoryController::class,'store'])->name('other.cat.add');
+    Route::get('karegori-transaksi/{id}',[TransactionCategoryController::class,'edit'])->name('other.cat.edit');
+    Route::patch('karegori-transaksi/{id}',[TransactionCategoryController::class,'update'])->name('other.cat.update');
+
+    Route::post('transaksi-lainnya',[OtherTransactionController::class,'store'])->name('other.transaction.add');
 });
 
 Route::middleware(['auth', 'multirole:admin,ketua,pengurus'])->group(function () {
@@ -83,4 +93,6 @@ Route::middleware(['auth', 'multirole:admin,ketua,pengurus'])->group(function ()
     Route::post('pengurus/pinjaman/loan',[LoanController::class,'loan'])->name('loan.add');
     Route::post('pengurus/pinjaman/installment',[LoanController::class,'installment'])->name('loan.installment');
     Route::get('pengurus/pinjaman/{id}',[LoanController::class,'show'])->name('loan.show');
+
+    Route::get('transaksi-lainnya',[OtherTransactionController::class,'index'])->name('other.transaction.index');
 });

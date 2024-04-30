@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\OtherTransaction;
+use App\Models\TransactionCategory;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class OtherTransactionController extends Controller
 {
@@ -12,7 +16,11 @@ class OtherTransactionController extends Controller
      */
     public function index()
     {
-        //
+        $transactions = OtherTransaction::getAllTransactions();
+        $categories = TransactionCategory::getActiveCategory();
+        $profiles = User::getAllUserProfile();
+
+        return view('pages.admin.others_transactions.index', compact('transactions', 'profiles', 'categories'));
     }
 
     /**
@@ -28,7 +36,28 @@ class OtherTransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            't_cat_id' => 'required|exists:transaction_categories,id',
+            'description' => 'required|min:5',
+            'amount' => 'required|numeric',
+            'date' => 'required'
+        ]);
+
+        try {
+            $data = $request->all();
+            $data['created_by'] = Auth::id();
+            $data['description'] = ucwords($data['description']);
+
+            OtherTransaction::create($data);
+
+            Session::flash('success', 'Berhasil menambahkan transaksi');
+            return back();
+
+        } catch (\Exception $e) {
+            // Session::flash('error', $e->getMessage());
+            Session::flash('error', 'Terjadi kesalahan saat melakukan save data');
+            return back();
+        }
     }
 
     /**
