@@ -33,6 +33,13 @@ class SecondarySaving extends Model
         return SecondarySaving::with('user:id', 'user.profile:user_id,name,member_id')->get();
     }
 
+    public static function getSecondaryWithdrawSavings()
+    {
+        return SecondarySaving::with('user:id', 'user.profile:user_id,name,member_id')
+            ->where('amount', '>', '0')
+            ->get();
+    }
+
     public static function getSingleSecondarySaving($id)
     {
         return SecondarySaving::with('user:id', 'user.profile:user_id,name,member_id')

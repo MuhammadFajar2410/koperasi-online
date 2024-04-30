@@ -90,7 +90,7 @@ class User extends Authenticatable
 
     public static function getUsers()
     {
-        return User::with('role:id,name', 'profile:user_id,name')->get();
+        return User::with('role:id,name', 'profile:user_id,name,member_id')->get();
     }
 
     public static function getActiveUser()

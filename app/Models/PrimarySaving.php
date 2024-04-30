@@ -34,6 +34,15 @@ class PrimarySaving extends Model
         return PrimarySaving::with('user:id', 'user.profile:user_id,name,member_id')->get();
     }
 
+    public static function getPrimaryWithdrawSavings()
+    {
+        return PrimarySaving::with('user:id', 'user.profile:user_id,name,member_id')
+            ->where('amount', '>' , '0')
+            ->get();
+    }
+
+
+
     public static function getSinglePrimarySaving($id)
     {
         return PrimarySaving::with('user:id', 'user.profile:user_id,name,member_id')

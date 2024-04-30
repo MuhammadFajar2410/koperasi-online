@@ -28,7 +28,7 @@ class PrimarySavingController extends Controller
     {
         $savings = PrimarySaving::getPrimarySavings();
         $profiles = User::getActiveUser();
-        $allProfiles = User::getUsers();
+        $allProfiles = PrimarySaving::getPrimaryWithdrawSavings();
 
         return view('pages.pengurus.primary_savings.index', compact('savings', 'profiles', 'allProfiles'));
     }

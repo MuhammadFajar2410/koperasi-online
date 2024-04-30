@@ -126,7 +126,13 @@
                                         <select class="select-search form-control" id="user_id" name="user_id" data-fouc data-placeholder="Choose..">
                                             <option value=""></option>
                                             @foreach ($allProfiles as $p )
-                                                <option value="{{ $p->id }}">{{ $p->profile->name }}</option>
+                                            <option value="{{ $p->user_id }}">
+                                                @if ($p->user->profile->member_id)
+                                                    {{ $p->user->profile->member_id }} - {{ $p->user->profile->name }} - {{ 'Rp.' . number_format($p->amount, 0, ',', '.') }}
+                                                @else
+                                                    Belum ada - {{ $p->user->profile->name }} - {{ 'Rp.' . number_format($p->amount, 0, ',', '.') }}
+                                                @endif
+                                            </option>
                                             @endforeach
                                         </select>
                                     </div>
