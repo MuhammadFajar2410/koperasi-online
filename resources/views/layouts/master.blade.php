@@ -9,7 +9,7 @@
     <meta name="author" content="">
 
     <title> @yield('page_title')</title>
-
+    @yield('script_top')
     @include('partials.inc_top')
 </head>
 

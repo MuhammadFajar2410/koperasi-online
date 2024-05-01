@@ -63,7 +63,15 @@
         </div>
     </div>
 
-
-
+    <div class="row">
+        <div class="col">
+            <div id="chart">
+                {!! $chart->container() !!}
+            </div>
+        </div>
+    </div>
 </div>
+    <script src="{{ $chart->cdn() }}"></script>
+    {{ $chart->script() }}
+
 @endsection
