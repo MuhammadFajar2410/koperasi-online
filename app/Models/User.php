@@ -78,6 +78,11 @@ class User extends Authenticatable
         return $this->hasMany(Loan::class,'user_id');
     }
 
+    public function mandatory()
+    {
+        return $this->hasMany(MandatorySaving::class,'user_id');
+    }
+
 
     // Transaksi DB
 
@@ -114,7 +119,7 @@ class User extends Authenticatable
 
     public static function getActiveUser()
     {
-        return User::with('profile:user_id,name')
+        return User::with('profile')
             ->where('status', true)
             ->where('username', '!=', 'admin')
             ->get();

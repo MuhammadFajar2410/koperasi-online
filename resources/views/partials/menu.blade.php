@@ -80,10 +80,14 @@
                         </ul>
                     </li>
                 @endif
-                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['primary.index', 'secondary.index', 'primary.member.index', 'secondary.member.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
+                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['mandatory.index','primary.index', 'secondary.index', 'primary.member.index', 'secondary.member.index','mandatory.member.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
                         <a href="#" class="nav-link"><i class="icon-windows2"></i><span>Transaksi</span></a>
                         <ul class="nav nav-group-sub">
                             @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua' || Auth::user()->role->name == 'pengurus' ))
+                                <li class="nav-item">
+                                    <a href="{{ route('mandatory.index') }}" class="nav-link
+                                    {{ (Route::is('mandatory.index')) ? 'active' : ''}}">Transaksi Simpanan Wajib</a>
+                                </li>
                                 <li class="nav-item">
                                     <a href="{{ route('primary.index') }}" class="nav-link
                                     {{ (Route::is('primary.index')) ? 'active' : ''}}">Transaksi Simpanan Pokok</a>
@@ -93,6 +97,10 @@
                                     {{ (Route::is('secondary.index')) ? 'active' : ''}}">Transaksi Simpanan Sukarela</a>
                                 </li>
                             @endif
+                                <li class="nav-item">
+                                    <a href="{{ route('mandatory.member.index') }}" class="nav-link
+                                    {{ (Route::is('mandatory.member.index')) ? 'active' : ''}}">Simpanan Wajib</a>
+                                </li>
                                 <li class="nav-item">
                                     <a href="{{ route('primary.member.index') }}" class="nav-link
                                     {{ (Route::is('primary.member.index')) ? 'active' : ''}}">Simpanan Pokok</a>

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PrimarySaving;
-use App\Models\SecondarySaving;
-use App\Models\SecondarySavingDetail;
+use App\Models\MandatorySaving;
+use App\Models\MandatorySavingDetail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -12,33 +11,33 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
-class SecondarySavingController extends Controller
+class MandatorySavingController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $savings = SecondarySavingDetail::getMemberSavingDetail(Auth::id());
-        $profile = SecondarySaving::getSingleMemberSecondarySaving(Auth::id());
+        $savings = MandatorySavingDetail::getMemberSavingDetail(Auth::id());
+        $profile = MandatorySaving::getSingleMemberMandatorySaving(Auth::id());
         $profiles = User::getAllUserProfile();
 
-        return view('pages.member.secondary_savings.index', compact('savings', 'profile', 'profiles'));
+        return view('pages.member.mandatory_savings.index', compact('savings', 'profile', 'profiles'));
     }
 
     public function pIndexSaving()
     {
-        $savings = SecondarySaving::getSecondarySavings();
+        $savings = MandatorySaving::getMandatorySavings();
         $profiles = User::getActiveUser();
         $created_by = User::getAllUserProfile();
-        $allProfiles = SecondarySaving::getSecondaryWithdrawSavings();
+        $allProfiles = MandatorySaving::getMandatoryWithdrawSavings();
 
-        return view('pages.pengurus.secondary_savings.index', compact('savings', 'profiles', 'allProfiles', 'created_by'));
+        return view('pages.pengurus.mandatory_savings.index', compact('savings', 'profiles', 'created_by', 'allProfiles'));
     }
 
     public function saving(Request $request)
     {
-        $this->validate($request, [
+        $this->validate($request,[
             'user_id' => 'required|exists:users,id',
             'amount' => 'required|min:0|numeric'
         ]);
@@ -48,7 +47,7 @@ class SecondarySavingController extends Controller
         try {
             $data = $request->all();
             $created_by = Auth::id();
-            $saldo = SecondarySaving::where('user_id', $data['user_id'])->first();
+            $saldo = MandatorySaving::where('user_id', $data['user_id'])->first();
             $date = Carbon::now()->toDateString();
 
             if ($saldo) {
@@ -64,7 +63,7 @@ class SecondarySavingController extends Controller
 
                 $saving_id = $saldo->id;
             } else {
-                $secondary_saving = SecondarySaving::create([
+                $secondary_saving = MandatorySaving::create([
                     'user_id' => $data['user_id'],
                     'amount' => $data['amount'],
                     'created_by' => $created_by,
@@ -73,8 +72,8 @@ class SecondarySavingController extends Controller
                 $saving_id = $secondary_saving->id;
             }
 
-            SecondarySavingDetail::create([
-                'secondary_id' => $saving_id,
+            MandatorySavingDetail::create([
+                'mandatory_id' => $saving_id,
                 'amount' => $data['amount'],
                 'date' => $date,
                 'type' => 'd',
@@ -86,7 +85,7 @@ class SecondarySavingController extends Controller
             DB::commit();
 
             Session::flash('success', 'Berhasil menambahkan tabungan anggota');
-            return redirect()->route('secondary.index');
+            return redirect()->route('mandatory.index');
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -95,6 +94,7 @@ class SecondarySavingController extends Controller
 
             return back();
         }
+
     }
 
     public function withdraw(Request $request)
@@ -111,7 +111,7 @@ class SecondarySavingController extends Controller
         try {
             $data = $request->all();
             $created_by = Auth::id();
-            $saldo = SecondarySaving::where('user_id', $data['user_id'])->first();
+            $saldo = MandatorySaving::where('user_id', $data['user_id'])->first();
             $date = Carbon::now()->toDateString();
             $saving_id = null;
             $amount = 0;
@@ -130,8 +130,8 @@ class SecondarySavingController extends Controller
                 'amount' => $amount,
             ]);
 
-            SecondarySavingDetail::create([
-                'secondary_id' => $saving_id,
+            MandatorySavingDetail::create([
+                'mandatory_id' => $saving_id,
                 'amount' => $data['amount'],
                 'date' => $date,
                 'type' => 'c',
@@ -143,16 +143,14 @@ class SecondarySavingController extends Controller
             DB::commit();
 
             Session::flash('success', 'Berhasil melakukan penarikan tabungan anggota');
-            return redirect()->route('secondary.index');
+            return redirect()->route('mandatory.index');
         } catch(\Exception $e) {
             DB::rollback();
 
-            // Session::flash('error', $e->getMessage());
-            Session::flash('error', 'Terjadi error saat melakuakan save data, silahkan hubungi admin jika masalah berlanjut');
+            Session::flash('error', $e->getMessage());
             return back();
         }
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -175,23 +173,21 @@ class SecondarySavingController extends Controller
      */
     public function show($id)
     {
-        $savings = SecondarySavingDetail::getSingleSecondarySavingDetail($id);
-        $profile = SecondarySaving::getSingleSecondarySaving($id);
+        $savings = MandatorySavingDetail::getSingleMandatorySavingDetail($id);
+        $profile = MandatorySaving::getSingleMandatorySaving($id);
         $profiles = User::getAllUserProfile();
-        // dd($profile);
 
         if(!$profile){
             abort(404);
         }
 
-
-        return view('pages.pengurus.secondary_savings.show', compact('savings', 'profile', 'profiles'));
+        return view('pages.pengurus.mandatory_savings.show',compact('savings', 'profile', 'profiles'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(SecondarySaving $secondarySaving)
+    public function edit(MandatorySaving $mandatorySaving)
     {
         //
     }
@@ -199,7 +195,7 @@ class SecondarySavingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, SecondarySaving $secondarySaving)
+    public function update(Request $request, MandatorySaving $mandatorySaving)
     {
         //
     }
@@ -207,7 +203,7 @@ class SecondarySavingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SecondarySaving $secondarySaving)
+    public function destroy(MandatorySaving $mandatorySaving)
     {
         //
     }
