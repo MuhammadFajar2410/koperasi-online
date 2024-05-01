@@ -99,6 +99,7 @@ class User extends Authenticatable
             ->whereHas('role', function ($query) use ($name) {
                 $query->where('name', $name);
             })
+            ->where('status', true)
             ->get();
     }
 
