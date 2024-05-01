@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Charts\MonthlyAmount;
 use App\Models\LoanDetail;
+use App\Models\MandatorySavingDetail;
 use App\Models\OtherTransaction;
 use App\Models\PrimarySaving;
 use App\Models\PrimarySavingDetail;
@@ -31,10 +32,12 @@ class HomeController extends Controller
         $current_amount = (OtherTransaction::getSUMDebit($start, $end) +
                             PrimarySavingDetail::getSUMDebit($start, $end) +
                             SecondarySavingDetail::getSUMDebit($start, $end) +
+                            MandatorySavingDetail::getSUMDebit($start, $end) +
                             LoanDetail::getSUMDebit($start, $end)) -
                         (OtherTransaction::getSUMCredit($start, $end) +
                             PrimarySavingDetail::getSUMCredit($start, $end) +
                             SecondarySavingDetail::getSUMCredit($start, $end) +
+                            MandatorySavingDetail::getSUMCredit($start, $end) +
                             LoanDetail::getSUMCredit($start, $end));
 
         // dd($current_amount);
@@ -65,11 +68,13 @@ class HomeController extends Controller
             $debit = (OtherTransaction::getSUMDebit(Carbon::parse($date)->startOfMonth(), Carbon::parse($date)->endOfMonth()) +
                 PrimarySavingDetail::getSUMDebit(Carbon::parse($date)->startOfMonth(), Carbon::parse($date)->endOfMonth()) +
                 SecondarySavingDetail::getSUMDebit(Carbon::parse($date)->startOfMonth(), Carbon::parse($date)->endOfMonth()) +
+                MandatorySavingDetail::getSUMDebit(Carbon::parse($date)->startOfMonth(), Carbon::parse($date)->endOfMonth()) +
                 LoanDetail::getSUMDebit(Carbon::parse($date)->startOfMonth(), Carbon::parse($date)->endOfMonth()));
 
             $credit = (OtherTransaction::getSUMCredit(Carbon::parse($date)->startOfMonth(), Carbon::parse($date)->endOfMonth()) +
                 PrimarySavingDetail::getSUMCredit(Carbon::parse($date)->startOfMonth(), Carbon::parse($date)->endOfMonth()) +
                 SecondarySavingDetail::getSUMCredit(Carbon::parse($date)->startOfMonth(), Carbon::parse($date)->endOfMonth()) +
+                MandatorySavingDetail::getSUMCredit(Carbon::parse($date)->startOfMonth(), Carbon::parse($date)->endOfMonth()) +
                 LoanDetail::getSUMCredit(Carbon::parse($date)->startOfMonth(), Carbon::parse($date)->endOfMonth()));
 
             $monthlyDebits[] = $debit;

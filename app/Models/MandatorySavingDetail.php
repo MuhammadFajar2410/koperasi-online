@@ -44,4 +44,18 @@ class MandatorySavingDetail extends Model
             ->orderBy('created_at', 'DESC')
             ->get();
     }
+
+    public static function getSUMDebit($startDate, $endDate)
+    {
+        return MandatorySavingDetail::where('type', 'd')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('amount');
+    }
+
+    public static function getSUMCredit($startDate, $endDate)
+    {
+        return MandatorySavingDetail::where('type', 'c')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('amount');
+    }
 }
