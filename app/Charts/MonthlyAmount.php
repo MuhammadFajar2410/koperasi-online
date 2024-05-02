@@ -18,6 +18,6 @@ class MonthlyAmount
     public function build(): \ArielMejiaDev\LarapexCharts\BarChart
     {
         return $this->chart->barChart()
-            ->setTitle('Perkembangan Transaksi Bulanan');
+            ->setTitle('Perkembangan Transaksi Tahunan');
     }
 }

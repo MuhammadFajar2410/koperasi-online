@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('secondary_id');
             $table->string('amount');
-            $table->string('date');
+            $table->date('date');
             $table->enum('type',['d','c']);
             $table->string('description')->nullable();
             $table->string('latest_amount');

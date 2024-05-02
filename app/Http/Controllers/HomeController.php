@@ -26,7 +26,7 @@ class HomeController extends Controller
         // Mengubah pemformatan tanggal awal
         $start = Carbon::parse('2013-01-01')->startOfMonth()->format('Y-m-d');
         $end = Carbon::now()->endOfMonth()->format('Y-m-d');
-        // dd($start);
+
 
         // Menghitung current_amount sesuai dengan rentang tanggal yang sama dengan data bulanan
         $current_amount = (OtherTransaction::getSUMDebit($start, $end) +
@@ -42,8 +42,8 @@ class HomeController extends Controller
 
         // dd($current_amount);
 
+
         $data = $this->getYearlyData($start, $end);
-        // dd($data);
         $chart = $monthlyAmount->build()
             ->setWidth(1200)
             ->setHeight(400)
@@ -60,6 +60,7 @@ class HomeController extends Controller
         $monthlyLabels = [];
         $monthlyDebits = [];
         $monthlyCredits = [];
+
 
         $date = $start;
         while ($date <= $end) {
@@ -104,11 +105,13 @@ class HomeController extends Controller
 
             $debit = (OtherTransaction::getSUMDebit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
                 PrimarySavingDetail::getSUMDebit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
+                MandatorySavingDetail::getSUMDebit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
                 SecondarySavingDetail::getSUMDebit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
                 LoanDetail::getSUMDebit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')));
 
             $credit = (OtherTransaction::getSUMCredit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
                 PrimarySavingDetail::getSUMCredit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
+                MandatorySavingDetail::getSUMCredit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
                 SecondarySavingDetail::getSUMCredit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
                 LoanDetail::getSUMCredit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')));
 
@@ -124,6 +127,40 @@ class HomeController extends Controller
             'credits' => $yearlyCredits,
         ];
     }
+    // private function getYearlyData($start, $end)
+    // {
+    //     $yearlyLabels = [];
+    //     $yearlyDebits = [];
+    //     $yearlyCredits = [];
+
+    //     $year = Carbon::parse($start)->year;
+    //     $endYear = Carbon::parse($end)->year;
+
+    //     while ($year <= $endYear) {
+    //         $yearlyLabels[] = $year;
+
+    //         $debit = (OtherTransaction::getSUMDebit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
+    //             PrimarySavingDetail::getSUMDebit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
+    //             SecondarySavingDetail::getSUMDebit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
+    //             LoanDetail::getSUMDebit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')));
+
+    //         $credit = (OtherTransaction::getSUMCredit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
+    //             PrimarySavingDetail::getSUMCredit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
+    //             SecondarySavingDetail::getSUMCredit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')) +
+    //             LoanDetail::getSUMCredit(Carbon::parse($year.'-01-01'), Carbon::parse($year.'-12-31')));
+
+    //         $yearlyDebits[] = $debit;
+    //         $yearlyCredits[] = $credit;
+
+    //         $year++;
+    //     }
+
+    //     return [
+    //         'labels' => $yearlyLabels,
+    //         'debits' => $yearlyDebits,
+    //         'credits' => $yearlyCredits,
+    //     ];
+    // }
 
 
 

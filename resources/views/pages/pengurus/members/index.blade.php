@@ -52,19 +52,8 @@
                                     <td>{{ $p->user->joinOn ?? '' }}</td>
                                     <td>{{ $p->user->exitOn ?? '' }}</td>
                                     <td>
-                                        @foreach ($primary as $pr )
-                                            @if ($p->user->id == $pr->user_id)
-                                                {{ $pr->id }}
-                                            @endif
-                                        @endforeach
+                                        {{ $p->user->reason ?? '' }}
                                     </td>
-                                    {{-- @foreach ($primary as $pr)
-                                        @if ($p->user->id == $pr->user_id)
-                                            <td>{{ $pr->id }}</td>
-                                        @else
-                                            <td>Tidak ada simpanan pokok</td>
-                                        @endif
-                                    @endforeach --}}
                                     <td class="text-center">
                                         @foreach ($primary as $pr )
                                             @if ($p->user->id == $pr->user_id)
