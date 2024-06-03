@@ -27,6 +27,7 @@ class HomeController extends Controller
         $start = Carbon::parse('2013-01-01')->startOfMonth()->format('Y-m-d');
         $end = Carbon::now()->endOfMonth()->format('Y-m-d');
 
+        // dd(LoanDetail::getSUMCredit($start,$end));
 
         // Menghitung current_amount sesuai dengan rentang tanggal yang sama dengan data bulanan
         $current_amount = (OtherTransaction::getSUMDebit($start, $end) +
@@ -44,6 +45,7 @@ class HomeController extends Controller
 
 
         $data = $this->getYearlyData($start, $end);
+        // dd($data);
         $chart = $monthlyAmount->build()
             ->setWidth(1200)
             ->setHeight(400)

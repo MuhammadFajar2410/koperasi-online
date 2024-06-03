@@ -57,6 +57,7 @@ class LoanDetail extends Model
     {
         return LoanDetail::where('type', 'c')
             ->whereBetween('date', [$startDate, $endDate])
+            ->where('description', '!=', 'Bunga Pinjaman')
             ->sum('amount');
     }
 

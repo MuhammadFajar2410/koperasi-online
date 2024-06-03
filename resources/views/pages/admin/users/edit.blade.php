@@ -23,16 +23,23 @@
                                     @csrf @method('PATCH')
 
                                     <div class="form-group row">
+                                        <label for="username" class="col-lg-3 col-form-label font-weight-semibold">Username <span class="text-danger">*</span></label>
+                                        <div class="col-lg-9">
+                                            <input id="username" name="username" value="{{ $user->username }}" type="text" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
                                         <label for="password" class="col-lg-3 col-form-label font-weight-semibold">Password Baru <span class="text-danger">*</span></label>
                                         <div class="col-lg-9">
-                                            <input id="password" name="password"  required type="password" class="form-control" required>
+                                            <input id="password" name="password"  type="password" class="form-control">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label for="password_confirmation" class="col-lg-3 col-form-label font-weight-semibold">Konfirmasi Password <span class="text-danger">*</span></label>
                                         <div class="col-lg-9">
-                                            <input id="password_confirmation" name="password_confirmation"  required type="password" class="form-control" required>
+                                            <input id="password_confirmation" name="password_confirmation"  type="password" class="form-control">
                                         </div>
                                     </div>
 

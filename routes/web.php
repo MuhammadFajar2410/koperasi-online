@@ -9,6 +9,7 @@ use App\Http\Controllers\MandatorySavingController;
 use App\Http\Controllers\OtherTransactionController;
 use App\Http\Controllers\PrimarySavingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\SecondarySavingController;
@@ -59,6 +60,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('profile', [UserController::class,'myProfile'])->name('my.profile');
     Route::patch('profile/{id}', [UserController::class,'changePasswordMember'])->name('change.password');
+
+    Route::get('laporan', [ReportController::class, 'index' ])->name('report.index');
 });
 
 

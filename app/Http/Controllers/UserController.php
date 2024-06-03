@@ -150,7 +150,7 @@ class UserController extends Controller
     public function changePasswordAdmin(Request $request, $id)
     {
         $this->validate($request, [
-            'password' => 'required|min:6|confirmed'
+            'password' => 'nullable|min:6|confirmed'
         ]);
 
         $user = User::getSingleUser($id);
@@ -160,7 +160,14 @@ class UserController extends Controller
 
             $data = $request->all();
 
+            if ($request->has('password')) {
+                $data['password'] = Hash::make($data['password']);
+            } else {
+                $data['password'] = $user->password;
+            }
+
             $user->update([
+                'username' => $data['username'],
                 'password' => Hash::make($data['password']),
                 'updated_by' => Auth::id()
             ]);

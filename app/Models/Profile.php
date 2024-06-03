@@ -31,4 +31,6 @@ class Profile extends Model
     {
         return Profile::with('user:id,status,exitOn,joinOn,reason')->get();
     }
+
+
 }

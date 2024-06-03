@@ -52,55 +52,68 @@ class LoanController extends Controller
     }
 
     public function loan(Request $request)
-    {
-        $this->validate($request, [
-            'user_id' => 'required|exists:users,id',
-            'amount' => 'required|min:0|numeric'
+{
+    $this->validate($request, [
+        'user_id' => 'required|exists:users,id',
+        'amount' => 'required|min:0|numeric',
+        'interest' => 'required|min:0|numeric', // Ensure interest is provided
+        'period' => 'required|string', // Ensure period is provided
+        'description' => 'nullable|string' // Optional description
+    ]);
+
+    DB::beginTransaction();
+
+    try {
+        $data = $request->all();
+        $created_by = Auth::id();
+        $date = Carbon::now()->toDateString();
+        $data['period'] = strtoupper($data['period']);
+        $interest = $data['amount'] * $data['interest'] / 100;
+        $total_amount = $data['amount'] + $interest;
+
+        $loan = Loan::create([
+            'user_id' => $data['user_id'],
+            'loan_type' => 'uang',
+            'loan_amount' => $data['amount'],
+            'loan_interest' => $data['interest'],
+            'total_amount' => $total_amount,
+            'remaining_loan' => $total_amount,
+            'period' => $data['period'],
+            'created_by' => $created_by,
         ]);
 
-        DB::beginTransaction();
+        LoanDetail::create([
+            'loan_id' => $loan->id,
+            'amount' => $data['amount'],
+            'date' => $date,
+            'type' => 'c',
+            'latest_amount' => $total_amount,
+            'description' => $data['description'],
+            'created_by' => $created_by
+        ]);
 
-        try {
-            $data = $request->all();
-            $created_by = Auth::id();
-            $date = Carbon::now()->toDateString();
-            $data['period'] = strtoupper($data['period']);
-            $total_amount = $data['amount'] + ($data['amount'] * $data['interest'] / 100);
-            // dd($data);
+        LoanDetail::create([
+            'loan_id' => $loan->id,
+            'amount' => $interest,
+            'date' => $date,
+            'type' => 'c',
+            'latest_amount' => $total_amount,
+            'description' => 'Bunga Pinjaman',
+            'created_by' => $created_by
+        ]);
 
-            $loan = Loan::create([
-                'user_id' => $data['user_id'],
-                'loan_type' => 'uang',
-                'loan_amount' => $data['amount'],
-                'loan_interest' => $data['interest'],
-                'total_amount' => $total_amount,
-                'remaining_loan' => $total_amount,
-                'period' => $data['period'],
-                'created_by' => $created_by,
-            ]);
+        DB::commit();
 
-            LoanDetail::create([
-                'loan_id' => $loan->id,
-                'amount' => $total_amount,
-                'date' => $date,
-                'type' => 'c',
-                'latest_amount' => $total_amount,
-                'description' => $data['description'],
-                'created_by' => $created_by
-            ]);
+        Session::flash('success', 'Berhasil mengajukan pinjaman');
+        return redirect()->route('loan.index');
+    } catch (\Exception $e) {
+        DB::rollback();
 
-            DB::commit();
-
-            Session::flash('success', 'Berhasil mengajukan pinjaman');
-            return redirect()->route('loan.index');
-        } catch (\Exception $e) {
-            DB::rollback();
-
-            Session::flash('error', 'Terjadi error saat melakukan save, silahkan hubungi admin untuk pengecekan');
-            // Session::flash('error', $e->getMessage());
-            return back();
-        }
+        Session::flash('error', 'Terjadi error saat melakukan save, silahkan hubungi admin untuk pengecekan');
+        // Session::flash('error', $e->getMessage());
+        return back();
     }
+}
 
     public function installment(Request $request)
     {

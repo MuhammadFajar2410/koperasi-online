@@ -64,4 +64,6 @@ class PrimarySavingDetail extends Model
             ->sum('amount');
     }
 
+
+
 }
