@@ -51,6 +51,7 @@
                                     <td>{{ $p->user->status ? 'Aktif' : 'Non Aktif' }}</td>
                                     <td>{{ $p->user->joinOn ?? '' }}</td>
                                     <td>{{ $p->user->exitOn ?? '' }}</td>
+                                    {{-- alasan keluar --}}
                                     <td>
                                         {{ $p->user->reason ?? '' }}
                                     </td>
