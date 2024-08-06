@@ -65,6 +65,7 @@
                                                         </a>
 
                                                         <div class="dropdown-menu dropdown-menu-left">
+                                                            {{-- Langsung menuju simpanan --}}
                                                             <a href="{{ route('mandatory.show', $pr->id) }}" class="dropdown-item"><i class="icon-eye"></i> Simpanan Wajib</a>
                                                             <a href="{{ route('primary.show', $pr->id) }}" class="dropdown-item"><i class="icon-eye"></i> Simpanan Pokok</a>
                                                             <a href="{{ route('secondary.show', $pr->id) }}" class="dropdown-item"><i class="icon-eye"></i> Simpanan Sukarela</a>
