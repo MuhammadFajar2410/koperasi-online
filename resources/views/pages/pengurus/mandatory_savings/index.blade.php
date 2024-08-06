@@ -1,11 +1,11 @@
 @extends('layouts.master')
-@section('page_title', 'Simpanan Pokok')
+@section('page_title', 'Simpanan Wajib')
 @section('content')
 
     <div class="card">
         @include('layouts.notification')
         <div class="card-header header-elements-inline">
-            <h6 class="card-title">Simpanan Pokok</h6>
+            <h6 class="card-title">Simpanan Wajib</h6>
             <div class="header-elements">
                 <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>

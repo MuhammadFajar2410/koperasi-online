@@ -53,7 +53,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('simpanan-sukarela',[SecondarySavingController::class,'index'])->name('secondary.member.index');
 
-    Route::get('simpanan-wajib',[SecondarySavingController::class,'index'])->name('mandatory.member.index');
+    Route::get('simpanan-wajib',[MandatorySavingController::class,'index'])->name('mandatory.member.index');
 
     Route::get('pinjaman',[LoanController::class,'index'])->name('loan.member.index');
     Route::get('pinjaman/{id}',[LoanController::class,'memberShow'])->name('loan.member.show');
