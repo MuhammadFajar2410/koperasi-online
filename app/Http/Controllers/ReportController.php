@@ -11,7 +11,7 @@ class ReportController extends Controller
      */
     public function index()
     {
-        return view('pages.member.reports.index');
+        return view('pages.reports.transactions.index');
     }
 
     /**
