@@ -10,6 +10,7 @@ use App\Http\Controllers\OtherTransactionController;
 use App\Http\Controllers\PrimarySavingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReportTransactionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\SecondarySavingController;
@@ -115,4 +116,6 @@ Route::middleware(['auth', 'multirole:admin,ketua,pengurus'])->group(function ()
 
 
     Route::get('transaksi-lainnya',[OtherTransactionController::class,'index'])->name('other.transaction.index');
+
+    Route::get('riwayat-transaksi',[ReportTransactionController::class,'index'])->name('report.index');
 });

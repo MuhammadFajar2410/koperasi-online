@@ -27,6 +27,13 @@ class MandatorySavingDetail extends Model
 
     //DB Transactions
 
+    public static function getMandatorySavingsDetail()
+    {
+        return MandatorySavingDetail::with('mandatory.user.profile')
+            ->orderBy('created_at', 'DESC')
+            ->get();
+    }
+
     public static function getSingleMandatorySavingDetail($id)
     {
         return MandatorySavingDetail::with('mandatory')

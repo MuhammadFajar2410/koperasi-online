@@ -177,6 +177,7 @@ class MandatorySavingController extends Controller
         $profile = MandatorySaving::getSingleMandatorySaving($id);
         $profiles = User::getAllUserProfile();
 
+
         if(!$profile){
             abort(404);
         }
