@@ -3,6 +3,7 @@
 @section('content')
 
     <div class="card">
+        @include('layouts.notification')
         <div class="card-header header-elements-inline">
             <h6 class="card-title">My Profile</h6>
         </div>

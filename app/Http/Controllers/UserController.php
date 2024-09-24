@@ -149,45 +149,50 @@ class UserController extends Controller
      */
     public function changePasswordAdmin(Request $request, $id)
     {
+
         $this->validate($request, [
+            'username' => 'required|string|max:255',
             'password' => 'nullable|min:6|confirmed'
         ]);
 
-        $user = User::getSingleUser($id);
-
+            $user = User::findOrFail($id);
 
         try {
 
             $data = $request->all();
 
-            if ($request->has('password')) {
+            if ($request->filled('password')) {
                 $data['password'] = Hash::make($data['password']);
             } else {
-                $data['password'] = $user->password;
+                unset($data['password']);
             }
 
             $user->update([
                 'username' => $data['username'],
-                'password' => Hash::make($data['password']),
+                'password' => $data['password'] ?? $user->password,
                 'updated_by' => Auth::id()
             ]);
 
 
-
-            Session::flash('success', 'Berhasil merubah ');
+            Session::flash('success', 'Berhasil mengubah data pengguna');
             return redirect()->route('user.index');
+
         } catch (\Exception $e) {
-            // Session::flash('error',$e->getMessage());
+
             Session::flash('error', 'Kesalahan ketika mengirim data');
             return back();
         }
     }
 
+
     public function changePasswordMember(Request $request, $id)
     {
+
         $this->validate($request, [
-            'password' => 'required|confirmed'
+            'current_password' => 'required',
+            'password' => 'required|confirmed|min:6'
         ]);
+
 
         $user = User::getSingleUser($id);
 
@@ -198,21 +203,21 @@ class UserController extends Controller
             $old_pass = $data['current_password'];
             $new_pass = $data['password'];
 
-            if(password_verify($old_pass, $my_pass)){
+
+            if (password_verify($old_pass, $my_pass)) {
                 $data['password'] = Hash::make($new_pass);
+                $user->update([
+                    'password' => $data['password']
+                ]);
+
+                Session::flash('success', 'Berhasil mengganti password');
+                return redirect()->route('home');
             } else {
-                Session::flash('error', 'Password salah, silahkan hubungi admin jika lupa password');
+                Session::flash('error', 'Password lama salah, silahkan hubungi admin jika lupa password');
+                return back();
             }
+        } catch (\Exception $e) {
 
-            $user->update([
-                'password' => $data['password']
-            ]);
-
-            Session::flash('success', 'Berhasil mengganti password');
-            return redirect()->route('home');
-
-        } catch (\Exception $e){
-            // Session::flash('error',$e->getMessage());
             Session::flash('error', 'Kesalahan ketika mengirim data');
             return back();
         }
