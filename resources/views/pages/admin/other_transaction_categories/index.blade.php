@@ -17,7 +17,9 @@
         <div class="card-body">
             <ul class="nav nav-tabs nav-tabs-highlight">
                 <li class="nav-item"><a href="#all-classes" class="nav-link active" data-toggle="tab">List Transaksi</a></li>
-                <li class="nav-item"><a href="#menabung" class="nav-link" data-toggle="tab"> Tambah Kategori</a></li>
+                @if(Auth::user() && Auth::user()->role->name == 'admin')
+                    <li class="nav-item"><a href="#menabung" class="nav-link" data-toggle="tab"> Tambah Kategori</a></li>
+                @endif
             </ul>
 
             <div class="tab-content">
@@ -65,17 +67,18 @@
                                                 <a href="#" class="list-icons-item" data-toggle="dropdown">
                                                     <i class="icon-menu9"></i>
                                                 </a>
-
-                                                <div class="dropdown-menu dropdown-menu-left">
-
-
-                                                    <a href="{{ route('other.cat.edit', $c->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
+                                                @if(Auth::user() && Auth::user()->role->name == 'admin')
+                                                    <div class="dropdown-menu dropdown-menu-left">
 
 
-                                                    {{-- <a id="{{ $u->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
-                                                    <form method="POST" id="item-delete-{{ $u->id }}" action="{{ route('users.destroy', $u->id) }}" class="hidden">@csrf @method('delete')</form> --}}
+                                                        <a href="{{ route('other.cat.edit', $c->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
 
-                                                </div>
+
+                                                        {{-- <a id="{{ $c->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
+                                                        <form method="POST" id="item-delete-{{ $c->id }}" action="{{ route('other.cat.delete', $c->id) }}" class="hidden">@csrf @method('delete')</form> --}}
+
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>

@@ -22,6 +22,8 @@ class HomeController extends Controller
     {
         $user = User::getUserLogin(Auth::id());
         $role = Auth::user()->role;
+        // $username = Auth::user()->profile->name;
+        // dd($username);
 
         // Mengubah pemformatan tanggal awal
         $start = Carbon::parse('2013-01-01')->startOfMonth()->format('Y-m-d');

@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class PrimarySavingController extends Controller
@@ -50,6 +51,7 @@ class PrimarySavingController extends Controller
             $saldo = PrimarySaving::where('user_id', $data['user_id'])->first();
             $date = Carbon::now()->toDateString();
             $saving_id = $saldo->id;
+            $user_name = Auth::user()->profile->name;
 
             if ($saldo) {
                 $amount = $saldo->amount + $data['amount'];
@@ -69,6 +71,16 @@ class PrimarySavingController extends Controller
                     'description' => $data['description'],
                     'latest_amount' => $amount,
                     'created_by' => $created_by
+                ]);
+
+                Log::channel('transaction_logs')->info('Primary saving successful', [
+                    'primary_id' => $saving_id,
+                    'amount' => $data['amount'],
+                    'date' => $date,
+                    'type' => 'd',
+                    'description' => $data['description'],
+                    'latest_amount' => $amount,
+                    'user_name' => $user_name
                 ]);
 
 
@@ -98,6 +110,7 @@ class PrimarySavingController extends Controller
 
         try {
             $data = $request->all();
+            $user_name = Auth::user()->profile->name;
             $created_by = Auth::id();
             $saldo = PrimarySaving::where('user_id', $data['user_id'])->first();
             $date = Carbon::now()->toDateString();
@@ -126,6 +139,16 @@ class PrimarySavingController extends Controller
                 'description' => $data['description'],
                 'latest_amount' => $amount,
                 'created_by' => $created_by
+            ]);
+
+            Log::channel('transaction_logs')->info('Primary withdraw successful', [
+                'primary_id' => $saving_id,
+                'amount' => $data['amount'],
+                'date' => $date,
+                'type' => 'c',
+                'description' => $data['description'],
+                'latest_amount' => $amount,
+                'user_name' => $user_name
             ]);
 
             DB::commit();

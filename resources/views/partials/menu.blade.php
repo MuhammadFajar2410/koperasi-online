@@ -126,10 +126,11 @@
                                 </li>
                         </ul>
                     </li>
-                    @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua' || Auth::user()->role->name == 'pengurus'))
+
                     <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['other.cat.index', 'other.transaction.index', 'report.index']) ? 'nav-item-expanded nav-item-open' : '' }}">
                         <a href="#" class="nav-link"><i class="icon-windows2"></i><span>Transaksi Lainnya</span></a>
                         <ul class="nav nav-group-sub">
+                            @if(Auth::user() && (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'ketua' || Auth::user()->role->name == 'pengurus'))
                                 <li class="nav-item">
                                     <a href="{{ route('other.cat.index') }}" class="nav-link
                                     {{ (Route::is('other.cat.index')) ? 'active' : ''}}">Kategori Transaksi Lainnya</a>
@@ -138,13 +139,13 @@
                                     <a href="{{ route('other.transaction.index') }}" class="nav-link
                                     {{ (Route::is('other.transaction.index')) ? 'active' : ''}}">Transaksi Lainnya</a>
                                 </li>
+                            @endif
                                 <li class="nav-item">
                                     <a href="{{ route('report.index') }}" class="nav-link
                                     {{ (Route::is('report.index')) ? 'active' : ''}}">Riwayat Transaksi</a>
                                 </li>
                         </ul>
                     </li>
-                @endif
                 </ul>
             </div>
         </div>

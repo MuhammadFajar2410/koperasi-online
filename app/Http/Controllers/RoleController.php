@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class RoleController extends Controller
@@ -36,8 +38,15 @@ class RoleController extends Controller
 
         try {
             $input = $request->all();
+            $user_name = Auth::user()->profile->name;
+
             $input['name'] = str_replace(' ', '_', $request->input('name'));
             Role::create($input);
+
+            Log::channel('transaction_logs')->info('Add new role successful', [
+                'new_role' => $input['name'],
+                'user_name' => $user_name
+            ]);
 
             Session::flash('success', 'Berhasil membuat role baru');
             return back();
@@ -88,10 +97,23 @@ class RoleController extends Controller
         }
 
         try {
+            $old_namne = $role->name;
+            $old_status = $role->status;
+
             $input = $request->all();
+            $user_name = Auth::user()->profile->name;
+
             $input['name'] = str_replace(' ', '_', $request->input('name'));
 
             $role->update($input);
+
+            Log::channel('transaction_logs')->info('Change role successful', [
+                'old_role' => $old_namne,
+                'new_role' => $input['name'],
+                'old_status' => $old_status,
+                'status' => $input['status'],
+                'user_name' => $user_name
+            ]);
 
             Session::flash('success', 'Berhasil update role');
             return redirect()->route('role.index');
@@ -116,8 +138,16 @@ class RoleController extends Controller
         }
 
         $status = $role->delete();
+        $old_role = $role->name;
+        $user_name = Auth::user()->profile->name;
 
         if ($status) {
+
+            Log::channel('transaction_logs')->info('Delete role successful', [
+                'role' => $old_role,
+                'user_name' => $user_name
+            ]);
+
             Session::flash('success', 'Berhasil dihapus');
         } else {
             Session::flash('error', 'Terjadi error ketika melakukan delete');

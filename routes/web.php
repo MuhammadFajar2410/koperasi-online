@@ -63,30 +63,40 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('profile/{id}', [UserController::class,'changePasswordMember'])->name('change.password');
 
     Route::get('laporan', [ReportController::class, 'index' ])->name('report.index');
+
+    Route::get('riwayat-transaksi',[ReportTransactionController::class,'index'])->name('report.index');
+
 });
 
+Route::middleware(['auth', 'multirole:admin'])->group(function () {
 
-Route::middleware(['auth', 'multirole:admin,ketua'])->group(function () {
-    Route::get('jabatan', [RoleController::class, 'index'])->name('role.index');
     Route::post('jabatan', [RoleController::class, 'store'])->name('role.add');
     Route::get('jabatan/{id}',[RoleController::class,'edit'])->name('role.edit');
     Route::patch('jabatan/{id}',[RoleController::class,'update'])->name('role.update');
     Route::delete('jabatan/{id}',[RoleController::class,'destroy'])->name('role.destroy');
 
 
-    Route::get('karegori-transaksi',[TransactionCategoryController::class,'index'])->name('other.cat.index');
+
     Route::post('karegori-transaksi',[TransactionCategoryController::class,'store'])->name('other.cat.add');
     Route::get('karegori-transaksi/{id}',[TransactionCategoryController::class,'edit'])->name('other.cat.edit');
     Route::patch('karegori-transaksi/{id}',[TransactionCategoryController::class,'update'])->name('other.cat.update');
 
-    Route::post('transaksi-lainnya',[OtherTransactionController::class,'store'])->name('other.transaction.add');
 
     Route::get('users/edit/{id}',[UserController::class,'edit'])->name('user.edit');
     Route::patch('users/change-password/{id}',[UserController::class,'changePasswordAdmin'])->name('user.update');
     Route::patch('users/change-profile/{id}',[UserController::class,'changeProfileAdmin'])->name('profile.update');
+
+});
+
+Route::middleware(['auth', 'multirole:ketua,admin'])->group(function () {
+
+    Route::post('transaksi-lainnya',[OtherTransactionController::class,'store'])->name('other.transaction.add');
 });
 
 Route::middleware(['auth', 'multirole:admin,ketua,pengurus'])->group(function () {
+    Route::get('karegori-transaksi',[TransactionCategoryController::class,'index'])->name('other.cat.index');
+
+    Route::get('jabatan', [RoleController::class, 'index'])->name('role.index');
     Route::get('users',[UserController::class,'index'])->name('user.index');
     Route::get('users/add',[UserController::class,'addUser'])->name('add.user.view');
     Route::post('users/add',[UserController::class,'adminAddUser'])->name('add.user');
@@ -117,5 +127,5 @@ Route::middleware(['auth', 'multirole:admin,ketua,pengurus'])->group(function ()
 
     Route::get('transaksi-lainnya',[OtherTransactionController::class,'index'])->name('other.transaction.index');
 
-    Route::get('riwayat-transaksi',[ReportTransactionController::class,'index'])->name('report.index');
+
 });

@@ -17,7 +17,9 @@
         <div class="card-body">
             <ul class="nav nav-tabs nav-tabs-highlight">
                 <li class="nav-item"><a href="#all-classes" class="nav-link active" data-toggle="tab">Jabatan</a></li>
-                <li class="nav-item"><a href="#new-class" class="nav-link" data-toggle="tab"><i class="icon-plus2"></i>Tambah Jabatan Baru</a></li>
+                @if(Auth::user() && (Auth::user()->role->name == 'admin'))
+                    <li class="nav-item"><a href="#new-class" class="nav-link" data-toggle="tab"><i class="icon-plus2"></i>Tambah Jabatan Baru</a></li>
+                @endif
             </ul>
 
             <div class="tab-content">
@@ -45,17 +47,18 @@
                                                 <a href="#" class="list-icons-item" data-toggle="dropdown">
                                                     <i class="icon-menu9"></i>
                                                 </a>
-
-                                                <div class="dropdown-menu dropdown-menu-left">
-
-
-                                                    <a href="{{ route('role.edit', $r->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
+                                                @if(Auth::user() && (Auth::user()->role->name == 'admin'))
+                                                    <div class="dropdown-menu dropdown-menu-left">
 
 
-                                                    <a id="{{ $r->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
-                                                    <form method="POST" id="item-delete-{{ $r->id }}" action="{{ route('role.destroy', $r->id) }}" class="hidden">@csrf @method('delete')</form>
+                                                        <a href="{{ route('role.edit', $r->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
 
-                                                </div>
+
+                                                        <a id="{{ $r->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
+                                                        <form method="POST" id="item-delete-{{ $r->id }}" action="{{ route('role.destroy', $r->id) }}" class="hidden">@csrf @method('delete')</form>
+
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>
@@ -71,7 +74,7 @@
                         <div class="col-md-12">
                         </div>
                     </div>
-
+                @if(Auth::user() && (Auth::user()->role->name == 'admin'))
                     <div class="row">
                         <div class="col-md-6">
                             <form method="POST" action="{{ route('role.add') }}">
@@ -90,6 +93,7 @@
                             </form>
                         </div>
                     </div>
+                @endif
                 </div>
             </div>
         </div>

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
@@ -51,6 +52,7 @@ class UserController extends Controller
         try {
             $data = $request->all();
             $data['created_by'] = Auth::id();
+            $user_name = Auth::user()->profile->name;
 
             // dd($data);
             $user = User::create([
@@ -62,7 +64,7 @@ class UserController extends Controller
             ]);
 
             if ($user) {
-                Profile::create([
+                $profile = Profile::create([
                     'user_id' => $user->id,
                     'member_id' =>$data['member_id'],
                     'name' => $data['name'],
@@ -88,6 +90,15 @@ class UserController extends Controller
                 ]);
 
             }
+
+            Log::channel('transaction_logs')->info('Add new member successful', [
+                'username' => $user->username,
+                'role_id' => $user->role_id,
+                'name' => $profile->name,
+                'primary' => $primary->id,
+                'primary_amount' => $primary->amount,
+                'user_name' => $user_name
+            ]);
 
             DB::commit();
 
@@ -158,8 +169,11 @@ class UserController extends Controller
             $user = User::findOrFail($id);
 
         try {
+            $old_user = $user->username;
 
             $data = $request->all();
+            $user_name = Auth::user()->profile->name;
+
 
             if ($request->filled('password')) {
                 $data['password'] = Hash::make($data['password']);
@@ -167,10 +181,21 @@ class UserController extends Controller
                 unset($data['password']);
             }
 
+
+
             $user->update([
                 'username' => $data['username'],
                 'password' => $data['password'] ?? $user->password,
                 'updated_by' => Auth::id()
+            ]);
+
+            // dd($data['password']);
+
+            Log::channel('transaction_logs')->info('Change username or password successful', [
+                'old_username' => $old_user,
+                'new_username' => $data['username'],
+                'password' => $request->filled('password') ? 'Password changed' : 'Password not changed',
+                'user_name' => $user_name
             ]);
 
 
@@ -202,12 +227,16 @@ class UserController extends Controller
             $my_pass = Auth::user()->password;
             $old_pass = $data['current_password'];
             $new_pass = $data['password'];
-
+            $user_name =  Auth::user()->profile->name;
 
             if (password_verify($old_pass, $my_pass)) {
                 $data['password'] = Hash::make($new_pass);
                 $user->update([
                     'password' => $data['password']
+                ]);
+
+                Log::channel('transaction_logs')->info('Change password successful', [
+                    'user_name' => $user_name
                 ]);
 
                 Session::flash('success', 'Berhasil mengganti password');
@@ -236,6 +265,7 @@ class UserController extends Controller
             DB::beginTransaction();
         try {
             $data = $request->all();
+            $user_name = Auth::user()->profile->name;
 
             $user->update([
                 'role_id' => $data['role_id'],
@@ -250,6 +280,10 @@ class UserController extends Controller
                 'address' => $data['address'],
                 'gender' => $data['gender'],
                 'job' => $data['job'],
+            ]);
+
+            Log::channel('transaction_logs')->info('Change profile successful', [
+                'user_name' => $user_name
             ]);
 
             DB::commit();

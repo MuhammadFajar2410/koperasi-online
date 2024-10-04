@@ -7,6 +7,7 @@ use App\Models\TransactionCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class OtherTransactionController extends Controller
@@ -47,8 +48,19 @@ class OtherTransactionController extends Controller
             $data = $request->all();
             $data['created_by'] = Auth::id();
             $data['description'] = ucwords($data['description']);
+            $user_name = Auth::user()->profile->name;
 
-            OtherTransaction::create($data);
+            $trans = OtherTransaction::create($data);
+
+            Log::channel('transaction_logs')->info('Add other transaction successful', [
+                'id' => $trans->id,
+                't_cat_id' => $trans->t_cat_id,
+                'description' => $trans->description,
+                'amount' => $trans->amount,
+                'type' => $trans->type,
+                'date' => $trans->date,
+                'user_name' => $user_name
+            ]);
 
             Session::flash('success', 'Berhasil menambahkan transaksi');
             return back();

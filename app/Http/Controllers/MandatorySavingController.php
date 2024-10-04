@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class MandatorySavingController extends Controller
@@ -46,6 +47,7 @@ class MandatorySavingController extends Controller
 
         try {
             $data = $request->all();
+            $user_name = Auth::user()->profile->name;
             $created_by = Auth::id();
             $saldo = MandatorySaving::where('user_id', $data['user_id'])->first();
             $date = Carbon::now()->toDateString();
@@ -82,6 +84,17 @@ class MandatorySavingController extends Controller
                 'created_by' => $created_by
             ]);
 
+            Log::channel('transaction_logs')->info('Mandatory saving successful',
+            [
+                'mandatory_id' => $saving_id,
+                'amount' => $data['amount'],
+                'date' => $date,
+                'type' => 'd',
+                'description' => $data['description'],
+                'latest_amount' => $amount,
+                'user_name' => $user_name
+            ]);
+
             DB::commit();
 
             Session::flash('success', 'Berhasil menambahkan tabungan anggota');
@@ -110,6 +123,7 @@ class MandatorySavingController extends Controller
 
         try {
             $data = $request->all();
+            $user_name = Auth::user()->profile->name;
             $created_by = Auth::id();
             $saldo = MandatorySaving::where('user_id', $data['user_id'])->first();
             $date = Carbon::now()->toDateString();
@@ -138,6 +152,16 @@ class MandatorySavingController extends Controller
                 'description' => $data['description'],
                 'latest_amount' => $amount,
                 'created_by' => $created_by
+            ]);
+
+            Log::channel('transaction_logs')->info('Mandatory withdraw successful', [
+                'mandatory_id' => $saving_id,
+                'amount' => $data['amount'],
+                'date' => $date,
+                'type' => 'c',
+                'description' => $data['description'],
+                'latest_amount' => $amount,
+                'user_name' => $user_name
             ]);
 
             DB::commit();

@@ -58,6 +58,13 @@ return [
             'ignore_exceptions' => false,
         ],
 
+        'transaction_logs' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/transaction.log'),
+            'level' => 'info',
+            'days' => 30,
+        ],
+
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),

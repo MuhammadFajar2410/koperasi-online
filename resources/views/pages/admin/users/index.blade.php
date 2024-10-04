@@ -49,17 +49,18 @@
                                                 <a href="#" class="list-icons-item" data-toggle="dropdown">
                                                     <i class="icon-menu9"></i>
                                                 </a>
-
-                                                <div class="dropdown-menu dropdown-menu-left">
-
-
-                                                    <a href="{{ route('user.edit', $u->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
+                                                @if(Auth::user() && (Auth::user()->role->name == 'admin'))
+                                                    <div class="dropdown-menu dropdown-menu-left">
 
 
-                                                    {{-- <a id="{{ $u->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
-                                                    <form method="POST" id="item-delete-{{ $u->id }}" action="{{ route('users.destroy', $u->id) }}" class="hidden">@csrf @method('delete')</form> --}}
+                                                        <a href="{{ route('user.edit', $u->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
 
-                                                </div>
+
+                                                        {{-- <a id="{{ $u->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
+                                                        <form method="POST" id="item-delete-{{ $u->id }}" action="{{ route('users.destroy', $u->id) }}" class="hidden">@csrf @method('delete')</form> --}}
+
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>
